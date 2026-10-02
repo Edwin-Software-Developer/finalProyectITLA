@@ -1,0 +1,6 @@
+@ControlStock_HostAddress = http://localhost:5068
+
+GET {{ControlStock_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
