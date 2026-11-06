@@ -1,5 +1,6 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "B0iQUvnBRaw=",
   "success": true,
   "projectFilePath": "C:\\ProgramasV\\ControlStock\\ControlStock\\ControlStock.csproj",
@@ -35,6 +36,18 @@
     "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\system.security.cryptography.pkcs\\8.0.1\\system.security.cryptography.pkcs.8.0.1.nupkg.sha512",
     "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
     "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512"
+=======
+  "dgSpecHash": "hyyqjn/QiyA=",
+  "success": true,
+  "projectFilePath": "C:\\ProgramasV\\ControlStock\\ControlStock\\ControlStock.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
+    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
+    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
+    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
+    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.6.2\\swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512"
+>>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
   ],
   "logs": []
 }
