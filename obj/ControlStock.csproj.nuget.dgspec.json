@@ -53,6 +53,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+<<<<<<< HEAD
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.89, )"
+            },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[7.1.1, )"
+            },
+=======
+>>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
