@@ -8,11 +8,14 @@ import {
   LucidePanelLeftClose,
   LucideX,
 } from '@lucide/angular';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { navigationGroups } from '../data/dashboard.data';
 
 @Component({
   selector: 'app-sidebar',
   imports: [
+    RouterLink,
+    RouterLinkActive,
     LucideActivity,
     LucideArrowRight,
     LucideChevronDown,
@@ -56,14 +59,15 @@ import { navigationGroups } from '../data/dashboard.data';
           <div class="nav-group">
             <p class="nav-heading">{{ group.label }}</p>
             @for (item of group.items; track item.label) {
-              @let active = item.label === 'Dashboard';
               <a
                 class="nav-link"
-                [class.nav-link-active]="active"
-                [attr.aria-current]="active ? 'page' : null"
-                [href]="item.href"
+                #rla="routerLinkActive"
+                routerLinkActive="nav-link-active"
+                ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: item.href === '/' }"
+                [routerLink]="item.href"
               >
-                <svg [lucideIcon]="item.icon" [size]="17" [strokeWidth]="active ? 2.2 : 1.8"></svg>
+                <svg [lucideIcon]="item.icon" [size]="17" [strokeWidth]="rla.isActive ? 2.2 : 1.8"></svg>
                 <span>{{ item.label }}</span>
                 @if (item.label === 'Predicciones') {
                   <span class="nav-count">3</span>

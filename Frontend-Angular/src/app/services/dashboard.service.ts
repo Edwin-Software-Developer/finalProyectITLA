@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-
-// Backend ASP.NET Core (perfil "http" de launchSettings.json).
-export const API_URL = 'http://localhost:5068';
+import { API_URL } from './api';
 
 export interface AlertaInventario {
   nombre: string;

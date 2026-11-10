@@ -1,0 +1,211 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> CATÁLOGOS</div>
+      <h1>Productos</h1>
+      <p>Administra el catálogo. Los datos se leen y guardan en SQL Server a través de la API.</p>
+    </div>
+    <button class="primary-button" (click)="openCreate()">
+      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+      Nuevo producto
+    </button>
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <label class="products-search">
+        <svg lucideSearch [size]="16"></svg>
+        <input
+          type="search"
+          placeholder="Buscar por nombre o SKU..."
+          aria-label="Buscar productos"
+          [value]="search()"
+          (input)="onSearch($event)"
+        />
+      </label>
+      <select class="products-select" aria-label="Filtrar por estado" (change)="onStatus($event)">
+        <option value="todos">Todos</option>
+        <option value="activos">Activos</option>
+        <option value="inactivos">Inactivos</option>
+      </select>
+      <span class="products-count">{{ filtered().length }} de {{ productos().length }}</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar desde la API" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando productos…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudieron cargar los productos</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        @if (filtered().length === 0) {
+          <div class="products-empty">
+            {{ productos().length === 0 ? 'Aún no hay productos registrados.' : 'Ningún producto coincide con el filtro.' }}
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Unidad</th>
+                  <th class="num">Costo</th>
+                  <th class="num">Precio</th>
+                  <th>Impuesto</th>
+                  <th>Estado</th>
+                  <th><span class="sr-only">Acciones</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of filtered(); track p.producto_id) {
+                  <tr>
+                    <td>
+                      <strong>{{ p.nombre }}</strong>
+                      <small>{{ p.sku }}</small>
+                    </td>
+                    <td>{{ p.categoria }}</td>
+                    <td>{{ p.unidad_medida }}</td>
+                    <td class="num">RD$ {{ p.costo_unitario | number: '1.2-2' }}</td>
+                    <td class="num">RD$ {{ p.precio_venta | number: '1.2-2' }}</td>
+                    <td>{{ p.impuesto }}</td>
+                    <td>
+                      <span class="badge" [class.badge-off]="!p.activo">{{ p.activo ? 'Activo' : 'Inactivo' }}</span>
+                    </td>
+                    <td class="actions">
+                      <button class="icon-button" [attr.aria-label]="'Editar ' + p.nombre" title="Editar" (click)="openEdit(p)">
+                        <svg lucidePencil [size]="16"></svg>
+                      </button>
+                      <button
+                        class="icon-button icon-danger"
+                        [attr.aria-label]="'Eliminar ' + p.nombre"
+                        title="Eliminar"
+                        [disabled]="deletingId() === p.producto_id"
+                        (click)="remove(p)"
+                      >
+                        <svg lucideTrash2 [size]="16"></svg>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+</div>
+
+@if (modalOpen()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <form
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="editing() ? 'Editar producto' : 'Nuevo producto'"
+      [formGroup]="form"
+      (click)="$event.stopPropagation()"
+      (ngSubmit)="save()"
+      novalidate
+    >
+      <div class="modal-head">
+        <h2>{{ editing() ? 'Editar producto' : 'Nuevo producto' }}</h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="closeModal()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <label class="field">
+          <span>SKU</span>
+          <input formControlName="sku" maxlength="50" placeholder="CAF-0048" [class.invalid]="invalid('sku')" />
+          @if (invalid('sku')) { <em>El SKU es requerido.</em> }
+        </label>
+
+        <label class="field">
+          <span>Nombre</span>
+          <input formControlName="nombre" maxlength="150" placeholder="Café molido premium" [class.invalid]="invalid('nombre')" />
+          @if (invalid('nombre')) { <em>El nombre es requerido.</em> }
+        </label>
+
+        <label class="field">
+          <span>Categoría</span>
+          <select formControlName="categoria_id" [class.invalid]="invalid('categoria_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (c of categorias(); track c.id) {
+              <option [ngValue]="c.id">{{ c.nombre }}</option>
+            }
+          </select>
+          @if (invalid('categoria_id')) { <em>Selecciona una categoría.</em> }
+        </label>
+
+        <label class="field">
+          <span>Impuesto</span>
+          <select formControlName="impuesto_id" [class.invalid]="invalid('impuesto_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (i of impuestos(); track i.id) {
+              <option [ngValue]="i.id">{{ i.nombre }}</option>
+            }
+          </select>
+          @if (invalid('impuesto_id')) { <em>Selecciona un impuesto.</em> }
+        </label>
+
+        <label class="field">
+          <span>Unidad de medida</span>
+          <select formControlName="unidad_medida">
+            @for (u of unidades; track u) {
+              <option [value]="u">{{ u }}</option>
+            }
+            @if (!unidades.includes(form.controls.unidad_medida.value)) {
+              <option [value]="form.controls.unidad_medida.value">{{ form.controls.unidad_medida.value }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Estado</span>
+          <select formControlName="activo">
+            <option [ngValue]="true">Activo</option>
+            <option [ngValue]="false">Inactivo</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Costo unitario (RD$)</span>
+          <input formControlName="costo_unitario" type="number" min="0" step="0.01" [class.invalid]="invalid('costo_unitario')" />
+          @if (invalid('costo_unitario')) { <em>Ingresa un costo válido.</em> }
+        </label>
+
+        <label class="field">
+          <span>Precio de venta (RD$)</span>
+          <input formControlName="precio_venta" type="number" min="0" step="0.01" [class.invalid]="invalid('precio_venta')" />
+          @if (invalid('precio_venta')) { <em>Ingresa un precio válido.</em> }
+        </label>
+      </div>
+
+      @if (formError()) {
+        <div class="form-error" role="alert">{{ formError() }}</div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-button" (click)="closeModal()" [disabled]="saving()">Cancelar</button>
+        <button type="submit" class="primary-button" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : editing() ? 'Guardar cambios' : 'Crear producto' }}
+        </button>
+      </div>
+    </form>
+  </div>
+}
