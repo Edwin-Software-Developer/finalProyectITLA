@@ -7,9 +7,9 @@
         public string Nombre { get; set; } = string.Empty;
         public int Categoria_id { get; set; }
         public int Impuesto_id { get; set; }
-        public int Unidad_medida {get;set;}
+        public string Unidad_medida { get; set; } = string.Empty;
         public decimal Costo_unitario { get; set; }
         public decimal Precio_venta { get; set; }
-        public bool activo { get; set; }
+        public bool Activo { get; set; }
     }
 }

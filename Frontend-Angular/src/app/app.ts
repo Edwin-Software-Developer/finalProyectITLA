@@ -1,88 +1,52 @@
-import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import {
-  LucideArrowRight,
-  LucideArrowUpRight,
   LucideBell,
-  LucideBoxes,
-  LucideBrainCircuit,
-  LucideCalendarDays,
   LucideChevronDown,
   LucideCommand,
-  LucideFileChartColumnIncreasing,
   LucideMenu,
-  LucidePackage,
-  LucidePlus,
   LucideSearch,
-  LucideShoppingBag,
-  LucideShoppingCart,
-  LucideUsers,
 } from '@lucide/angular';
-import { DemandForecast } from './components/demand-forecast';
-import { MetricCard } from './components/metric-card';
-import { SalesChart } from './components/sales-chart';
+import { filter } from 'rxjs';
 import { Sidebar } from './components/sidebar';
-import { AlertaInventario, DashboardService } from './services/dashboard.service';
-
-type LoadState = 'loading' | 'ready' | 'error';
+import { navigationGroups } from './data/dashboard.data';
 
 @Component({
   selector: 'app-root',
   imports: [
+    RouterOutlet,
     Sidebar,
-    MetricCard,
-    SalesChart,
-    DemandForecast,
-    LucideArrowRight,
-    LucideArrowUpRight,
     LucideBell,
-    LucideCalendarDays,
     LucideChevronDown,
     LucideCommand,
     LucideMenu,
-    LucidePackage,
-    LucidePlus,
     LucideSearch,
-    LucideShoppingBag,
-    LucideShoppingCart,
-    LucideUsers,
   ],
   templateUrl: './app.html',
 })
-export class App implements OnInit {
-  private readonly dashboardService = inject(DashboardService);
+export class App {
+  private readonly router = inject(Router);
 
   protected readonly menuOpen = signal(false);
   protected readonly searchOpen = signal(false);
-  protected readonly period = signal('Últimos 7 días');
-  protected readonly periods = ['Últimos 7 días', 'Últimos 30 días', 'Este año'];
+  protected readonly breadcrumb = signal({ section: 'General', title: 'Dashboard' });
 
-  // Alertas de inventario: vienen del endpoint GET /api/dashboard/resumen
-  protected readonly alerts = signal<AlertaInventario[]>([]);
-  protected readonly alertCount = signal(0);
-  protected readonly alertsState = signal<LoadState>('loading');
-
-  // Iconos pasados como datos a <app-metric-card>
-  protected readonly icons = {
-    sales: LucideShoppingCart,
-    report: LucideFileChartColumnIncreasing,
-    stock: LucideBoxes,
-    ai: LucideBrainCircuit,
-  };
-
-  ngOnInit(): void {
-    this.loadAlerts();
+  constructor() {
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe((e) => {
+        this.breadcrumb.set(this.resolveBreadcrumb(e.urlAfterRedirects));
+        this.menuOpen.set(false);
+      });
   }
 
-  protected loadAlerts(): void {
-    this.alertsState.set('loading');
-    this.dashboardService.getResumen().subscribe({
-      next: (resumen) => {
-        this.alerts.set(resumen.alertas);
-        this.alertCount.set(resumen.totalAlertas);
-        this.alertsState.set('ready');
-      },
-      error: () => this.alertsState.set('error'),
-    });
+  private resolveBreadcrumb(url: string): { section: string; title: string } {
+    const path = url.split('?')[0].split('#')[0] || '/';
+    for (const group of navigationGroups) {
+      const item = group.items.find((i) => i.href === path);
+      if (item) return { section: group.label, title: item.label };
+    }
+    return { section: 'General', title: 'No disponible' };
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -96,9 +60,5 @@ export class App implements OnInit {
       this.menuOpen.set(false);
       this.searchOpen.set(false);
     }
-  }
-
-  protected onPeriodChange(event: Event): void {
-    this.period.set((event.target as HTMLSelectElement).value);
   }
 }

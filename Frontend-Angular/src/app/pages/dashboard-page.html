@@ -1,0 +1,172 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> MARTES, 14 DE OCTUBRE DE 2026</div>
+      <h1>Buenos días, Edwin <span class="greeting-wave">✦</span></h1>
+      <p>Aquí tienes el resumen de lo que sucede en tu negocio hoy.</p>
+    </div>
+    <button class="primary-button">
+      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+      Nueva venta
+    </button>
+  </div>
+
+  <section aria-label="Resumen del negocio" class="metrics-grid grid">
+    <app-metric-card
+      [icon]="icons.sales"
+      label="Ventas del mes"
+      value="RD$ 284,590"
+      change="12.8%"
+      detail="vs. mes anterior"
+      tone="blue"
+    />
+    <app-metric-card
+      [icon]="icons.report"
+      label="Ventas esta semana"
+      value="RD$ 68,240"
+      change="8.2%"
+      detail="en 486 transacciones"
+      tone="green"
+    />
+    <app-metric-card
+      [icon]="icons.stock"
+      label="Inventario bajo"
+      [value]="alertsState() === 'ready' ? alertCount() + ' alertas' : '—'"
+      [change]="alertsState() === 'ready' ? alertCount() + ' productos' : 'sin datos'"
+      detail="requieren reposición"
+      tone="orange"
+      trend="down"
+    />
+    <app-metric-card
+      [icon]="icons.ai"
+      label="Predicciones críticas"
+      value="94% precisión"
+      change="3 productos"
+      detail="demanda en aumento"
+      tone="purple"
+    />
+  </section>
+
+  <section class="dashboard-grid grid">
+    <section class="panel sales-panel">
+      <div class="panel-heading sales-heading">
+        <div>
+          <h2>Resumen de ventas</h2>
+          <p class="panel-subtitle">Rendimiento de tu negocio en el tiempo</p>
+        </div>
+        <div class="chart-controls">
+          <div class="chart-legend"><span></span> Ventas</div>
+          <label class="select-wrap">
+            <svg lucideCalendarDays [size]="15"></svg>
+            <select aria-label="Período del resumen de ventas" (change)="onPeriodChange($event)">
+              @for (p of periods; track p) {
+                <option [selected]="p === period()">{{ p }}</option>
+              }
+            </select>
+            <svg lucideChevronDown [size]="14"></svg>
+          </label>
+        </div>
+      </div>
+      <div class="chart-total">
+        <strong>RD$ 68,240</strong>
+        <span class="chart-growth"><svg lucideArrowUpRight [size]="14"></svg> 12.8%</span>
+        <span class="chart-period">vs. período anterior</span>
+      </div>
+      <app-sales-chart />
+    </section>
+
+    <section class="panel quick-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Accesos rápidos</h2>
+          <p class="panel-subtitle">Lo que más necesitas, a un clic</p>
+        </div>
+      </div>
+      <div class="quick-links">
+        <a routerLink="/ventas/nueva" class="quick-link">
+          <span class="quick-link-icon quick-blue"><svg lucideShoppingCart [size]="18"></svg></span>
+          <span><strong>Registrar venta</strong><small>Inicia una nueva venta</small></span>
+          <svg lucideArrowRight [size]="16"></svg>
+        </a>
+        <a routerLink="/productos" class="quick-link">
+          <span class="quick-link-icon quick-violet"><svg lucidePackage [size]="18"></svg></span>
+          <span><strong>Agregar producto</strong><small>Actualiza tu catálogo</small></span>
+          <svg lucideArrowRight [size]="16"></svg>
+        </a>
+        <a routerLink="/compras" class="quick-link">
+          <span class="quick-link-icon quick-amber"><svg lucideShoppingBag [size]="18"></svg></span>
+          <span><strong>Nueva compra</strong><small>Repón tu inventario</small></span>
+          <svg lucideArrowRight [size]="16"></svg>
+        </a>
+        <a routerLink="/clientes" class="quick-link">
+          <span class="quick-link-icon quick-green"><svg lucideUsers [size]="18"></svg></span>
+          <span><strong>Ver clientes</strong><small>Administra tus contactos</small></span>
+          <svg lucideArrowRight [size]="16"></svg>
+        </a>
+      </div>
+      <div class="shortcut-hint"><kbd>F2</kbd> Atajo para buscar productos en Punto de venta</div>
+    </section>
+  </section>
+
+  <section class="bottom-grid grid">
+    <app-demand-forecast />
+    <section class="panel inventory-panel">
+      <div class="panel-heading">
+        <div>
+          <div class="panel-title-row">
+            <h2>Alertas de inventario</h2>
+            <span class="alert-count">{{ alertsState() === 'ready' ? alertCount() : '–' }}</span>
+          </div>
+          <p class="panel-subtitle">Productos que necesitan atención</p>
+        </div>
+        <button
+          aria-label="Recargar alertas de inventario"
+          class="icon-button more-button"
+          title="Recargar desde la API"
+          (click)="loadAlerts()"
+        >···</button>
+      </div>
+
+      @switch (alertsState()) {
+        @case ('loading') {
+          <div class="demand-skeleton">
+            <span class="skeleton skeleton-product"></span>
+            <span class="skeleton skeleton-stock"></span>
+            <span class="skeleton skeleton-demand"></span>
+          </div>
+        }
+        @case ('error') {
+          <div class="inventory-alert" role="alert">
+            <div class="alert-indicator alert-red"></div>
+            <div class="inventory-product">
+              <strong>No se pudo conectar con la API</strong>
+              <span>Verifica que el backend esté corriendo en http://localhost:5068</span>
+            </div>
+            <button class="panel-footer-link" (click)="loadAlerts()">Reintentar</button>
+          </div>
+        }
+        @default {
+          @for (alert of alerts(); track alert.nombre) {
+            <div class="inventory-alert">
+              <div class="alert-indicator" [class]="'alert-' + alert.nivel"></div>
+              <div class="inventory-product">
+                <strong>{{ alert.nombre }}</strong><span>{{ alert.detalle }}</span>
+              </div>
+              <div class="inventory-quantity">
+                <strong>{{ alert.cantidad }}</strong><span>mín. {{ alert.minimo }}</span>
+              </div>
+            </div>
+          }
+        }
+      }
+
+      <a class="panel-footer-link" routerLink="/inventario/reposicion">
+        Ver inventario completo <svg lucideArrowRight [size]="15"></svg>
+      </a>
+    </section>
+  </section>
+  <footer class="dashboard-footer">
+    <span>© 2026 Nexo ERP</span>
+    <span>Datos actualizados hace 2 minutos</span>
+  </footer>
+</div>

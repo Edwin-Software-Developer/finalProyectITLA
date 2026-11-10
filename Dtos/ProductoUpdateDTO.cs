@@ -1,15 +1,10 @@
-﻿using ControlStock.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ControlStock.Dtos
 {
-    public class ProductoUpdateDTO
+    public class ProductoUpdateDTO : ProductoCreateDTO
     {
+        [Range(1, int.MaxValue)]
         public int Producto_id { get; set; }
-        public string Sku { get; set; }
-        public string Nombre { get; set; }
-        public int Unidad_medida { get; set; }
-        public decimal Costo_unitario { get; set; }
-        public decimal Presio_venta { get; set; }
-        public bool activo { get; set; }
     }
 }
