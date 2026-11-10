@@ -9,7 +9,7 @@ namespace ControlStock.Models
         [Required (ErrorMessage ="El nombre es requerido")]
         public string Nombre { get; set; }
 
-        [Required (ErrorMessage ="El Documento es requerido")]\
+        [Required (ErrorMessage ="El Documento es requerido")]
         public string Documento { get; set; }
 
         [Required(ErrorMessage = "El Email es requerido")]
