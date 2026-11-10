@@ -10,7 +10,7 @@ namespace ControlStock.Models
 
         [Required(ErrorMessage = "El simbolo es requerido")]
         public char Simbolo { get; set; }
-        public decimal Decimales { get; set; } = string.Empty;
+        public decimal Decimales { get; set; }
         public bool Es_base { get; set; }
         public decimal Tasa_actual { get; set; }
         public bool Activo { get; set; }

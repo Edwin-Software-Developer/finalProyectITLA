@@ -1,8 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net8.0": {
-<<<<<<< HEAD
       "Dapper/2.1.89": {
         "type": "package",
         "compile": {
@@ -155,8 +154,6 @@
           }
         }
       },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
       "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
         "type": "package",
         "build": {
@@ -168,7 +165,6 @@
           "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets": {}
         }
       },
-<<<<<<< HEAD
       "Microsoft.Extensions.Caching.Abstractions/8.0.0": {
         "type": "package",
         "dependencies": {
@@ -377,8 +373,6 @@
           }
         }
       },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
       "Microsoft.OpenApi/1.6.14": {
         "type": "package",
         "compile": {
@@ -392,7 +386,6 @@
           }
         }
       },
-<<<<<<< HEAD
       "Microsoft.SqlServer.Server/1.0.0": {
         "type": "package",
         "compile": {
@@ -406,8 +399,6 @@
           }
         }
       },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
       "Swashbuckle.AspNetCore/6.6.2": {
         "type": "package",
         "dependencies": {
@@ -470,7 +461,6 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
-<<<<<<< HEAD
       },
       "System.Configuration.ConfigurationManager/8.0.1": {
         "type": "package",
@@ -588,13 +578,10 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
       }
     }
   },
   "libraries": {
-<<<<<<< HEAD
     "Dapper/2.1.89": {
       "sha512": "1VjFE664wnxvuhlgP8kS4PeFFF4jqD3VkbIHW6Zlc52zuibgcz5ICnIHcQXlTp6pURpPNGLV0ZpNe5x9KePJnA==",
       "type": "package",
@@ -761,8 +748,6 @@
         "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll"
       ]
     },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
     "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
       "sha512": "Ckb5EDBUNJdFWyajfXzUIMRkhf52fHZOQuuZg/oiu8y7zDCVwD0iHhew6MnThjHmevanpxL3f5ci2TtHQEN6bw==",
       "type": "package",
@@ -994,7 +979,6 @@
         "tools/netcoreapp2.1/System.Diagnostics.DiagnosticSource.dll"
       ]
     },
-<<<<<<< HEAD
     "Microsoft.Extensions.Caching.Abstractions/8.0.0": {
       "sha512": "3KuSxeHoNYdxVYfg2IRZCThcrlJ1XJqIXkAWikCsbm5C/bCjv7G0WoKDyuR98Q+T607QT2Zl5GsbGRkENcV2yQ==",
       "type": "package",
@@ -1393,8 +1377,6 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
     "Microsoft.OpenApi/1.6.14": {
       "sha512": "tTaBT8qjk3xINfESyOPE2rIellPvB7qpVqiWiyA/lACVvz+xOGiXhFUfohcx82NLbi5avzLW0lx+s6oAqQijfw==",
       "type": "package",
@@ -1410,7 +1392,6 @@
         "microsoft.openapi.nuspec"
       ]
     },
-<<<<<<< HEAD
     "Microsoft.SqlServer.Server/1.0.0": {
       "sha512": "N4KeF3cpcm1PUHym1RmakkzfkEv3GRMyofVv40uXsQhCQeglr2OHNcUk2WOG51AKpGO8ynGpo9M/kFXSzghwug==",
       "type": "package",
@@ -1429,8 +1410,6 @@
         "microsoft.sqlserver.server.nuspec"
       ]
     },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
     "Swashbuckle.AspNetCore/6.6.2": {
       "sha512": "+NB4UYVYN6AhDSjW0IJAd1AGD8V33gemFNLPaxKTtPkHB+HaKAKf9MGAEUPivEWvqeQfcKIw8lJaHq6LHljRuw==",
       "type": "package",
@@ -1532,7 +1511,6 @@
         "swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
-<<<<<<< HEAD
     },
     "System.Configuration.ConfigurationManager/8.0.1": {
       "sha512": "gPYFPDyohW2gXNhdQRSjtmeS6FymL2crg4Sral1wtvEJ7DUqFCDWDVbbLobASbzxfic8U1hQEdC7hmg9LHncMw==",
@@ -1730,54 +1708,39 @@
         "system.threading.ratelimiting.nuspec",
         "useSharedDesignerContext.txt"
       ]
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-<<<<<<< HEAD
       "Dapper >= 2.1.89",
       "Microsoft.Data.SqlClient >= 7.1.1",
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
       "Swashbuckle.AspNetCore >= 6.6.2"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Nevron Software\\Nevron Open Vision 2025.1\\Nuget\\Offline": {}
+    "C:\\Users\\edwin.perez\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ProgramasV\\ControlStock\\ControlStock\\ControlStock.csproj",
+      "projectUniqueName": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
       "projectName": "ControlStock",
-      "projectPath": "C:\\ProgramasV\\ControlStock\\ControlStock\\ControlStock.csproj",
-      "packagesPath": "C:\\Users\\Darikson Sanchez\\.nuget\\packages\\",
-      "outputPath": "C:\\ProgramasV\\ControlStock\\ControlStock\\obj\\",
+      "projectPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+      "packagesPath": "C:\\Users\\edwin.perez\\.nuget\\packages\\",
+      "outputPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Nevron Software\\Nevron Open Vision 2025.1\\Nuget\\Offline"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Darikson Sanchez\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\NevronOpenVision.25.8.26.12.config"
+        "C:\\Users\\edwin.perez\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files (x86)\\Nevron Software\\Nevron Open Vision 2025.1\\Nuget\\Offline\\nevronopenvision": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {}
         }
@@ -1792,13 +1755,13 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.400"
     },
     "frameworks": {
       "net8.0": {
+        "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
-<<<<<<< HEAD
           "Dapper": {
             "target": "Package",
             "version": "[2.1.89, )"
@@ -1807,8 +1770,6 @@
             "target": "Package",
             "version": "[7.1.1, )"
           },
-=======
->>>>>>> 3a3e32965de65f5ee23728c0b2d8e1df302a4f36
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.6.2, )"
@@ -1825,6 +1786,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.33, 8.0.33]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[8.0.33, 8.0.33]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.33, 8.0.33]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.33, 8.0.33]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -1833,7 +1812,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.318/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
