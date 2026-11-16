@@ -2,6 +2,15 @@
   "version": 4,
   "targets": {
     "net8.0": {
+      "BCrypt.Net-Next/4.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/BCrypt-Net-Next.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/BCrypt-Net-Next.dll": {}
+        }
+      },
       "Dapper/2.1.89": {
         "type": "package",
         "compile": {
@@ -14,6 +23,25 @@
             "related": ".xml"
           }
         }
+      },
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.34": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.7.3"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.Bcl.Cryptography/8.0.0": {
         "type": "package",
@@ -582,6 +610,31 @@
     }
   },
   "libraries": {
+    "BCrypt.Net-Next/4.2.0": {
+      "sha512": "gwLD2KfCuwQesP17aVh4h6lpiMPEVt5Lbpndo0ej903hNUUTtyxt3ARdDjmuydBRTAUICc7OVKVbaOvc6SQYXA==",
+      "type": "package",
+      "path": "bcrypt.net-next/4.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bcrypt.net-next.4.2.0.nupkg.sha512",
+        "bcrypt.net-next.nuspec",
+        "ico.png",
+        "lib/net10.0/BCrypt-Net-Next.dll",
+        "lib/net10.0/BCrypt.Net-Next.xml",
+        "lib/net462/BCrypt-Net-Next.dll",
+        "lib/net462/BCrypt.Net-Next.xml",
+        "lib/net472/BCrypt-Net-Next.dll",
+        "lib/net472/BCrypt.Net-Next.xml",
+        "lib/net48/BCrypt-Net-Next.dll",
+        "lib/net48/BCrypt.Net-Next.xml",
+        "lib/netstandard2.0/BCrypt-Net-Next.dll",
+        "lib/netstandard2.0/BCrypt.Net-Next.xml",
+        "lib/netstandard2.1/BCrypt-Net-Next.dll",
+        "lib/netstandard2.1/BCrypt.Net-Next.xml",
+        "readme.md"
+      ]
+    },
     "Dapper/2.1.89": {
       "sha512": "1VjFE664wnxvuhlgP8kS4PeFFF4jqD3VkbIHW6Zlc52zuibgcz5ICnIHcQXlTp6pURpPNGLV0ZpNe5x9KePJnA==",
       "type": "package",
@@ -601,6 +654,21 @@
         "lib/netstandard2.0/Dapper.dll",
         "lib/netstandard2.0/Dapper.xml",
         "readme.md"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.34": {
+      "sha512": "22sIBoFcuyqJCKCSchEtc0DWp+Jvx+nia6iPduPxwgHyycWS5yodcqCrcN1bWpffWWZDLTrawmPQk31JUDE1CQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.34",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
+        "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
+        "microsoft.aspnetcore.authentication.jwtbearer.8.0.34.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },
     "Microsoft.Bcl.Cryptography/8.0.0": {
@@ -1712,7 +1780,9 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "BCrypt.Net-Next >= 4.2.0",
       "Dapper >= 2.1.89",
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.34",
       "Microsoft.Data.SqlClient >= 7.1.1",
       "Swashbuckle.AspNetCore >= 6.6.2"
     ]
@@ -1723,11 +1793,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+      "projectUniqueName": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
       "projectName": "ControlStock",
-      "projectPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+      "projectPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
       "packagesPath": "C:\\Users\\edwin.perez\\.nuget\\packages\\",
-      "outputPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
+      "outputPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\edwin.perez\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1762,9 +1832,17 @@
         "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
+          "BCrypt.Net-Next": {
+            "target": "Package",
+            "version": "[4.2.0, )"
+          },
           "Dapper": {
             "target": "Package",
             "version": "[2.1.89, )"
+          },
+          "Microsoft.AspNetCore.Authentication.JwtBearer": {
+            "target": "Package",
+            "version": "[8.0.34, )"
           },
           "Microsoft.Data.SqlClient": {
             "target": "Package",

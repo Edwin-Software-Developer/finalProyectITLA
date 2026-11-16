@@ -8,7 +8,9 @@
     ".NETCoreApp,Version=v8.0": {
       "ControlStock/1.0.0": {
         "dependencies": {
+          "BCrypt.Net-Next": "4.2.0",
           "Dapper": "2.1.89",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.34",
           "Microsoft.Data.SqlClient": "7.1.1",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
@@ -16,11 +18,30 @@
           "ControlStock.dll": {}
         }
       },
+      "BCrypt.Net-Next/4.2.0": {
+        "runtime": {
+          "lib/netstandard2.1/BCrypt-Net-Next.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.2.0.0"
+          }
+        }
+      },
       "Dapper/2.1.89": {
         "runtime": {
           "lib/net8.0/Dapper.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.1.89.60231"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.34": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.16.0"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
+            "assemblyVersion": "8.0.34.0",
+            "fileVersion": "8.0.3426.52311"
           }
         }
       },
@@ -378,12 +399,26 @@
       "serviceable": false,
       "sha512": ""
     },
+    "BCrypt.Net-Next/4.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gwLD2KfCuwQesP17aVh4h6lpiMPEVt5Lbpndo0ej903hNUUTtyxt3ARdDjmuydBRTAUICc7OVKVbaOvc6SQYXA==",
+      "path": "bcrypt.net-next/4.2.0",
+      "hashPath": "bcrypt.net-next.4.2.0.nupkg.sha512"
+    },
     "Dapper/2.1.89": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-1VjFE664wnxvuhlgP8kS4PeFFF4jqD3VkbIHW6Zlc52zuibgcz5ICnIHcQXlTp6pURpPNGLV0ZpNe5x9KePJnA==",
       "path": "dapper/2.1.89",
       "hashPath": "dapper.2.1.89.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.34": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-22sIBoFcuyqJCKCSchEtc0DWp+Jvx+nia6iPduPxwgHyycWS5yodcqCrcN1bWpffWWZDLTrawmPQk31JUDE1CQ==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.34",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.8.0.34.nupkg.sha512"
     },
     "Microsoft.Bcl.Cryptography/8.0.0": {
       "type": "package",

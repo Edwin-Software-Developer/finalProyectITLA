@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "vYXswnCkT4Q=",
+  "dgSpecHash": "UfW2o6YkqRU=",
   "success": true,
-  "projectFilePath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+  "projectFilePath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\edwin.perez\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\dapper\\2.1.89\\dapper.2.1.89.nupkg.sha512",
+    "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.34\\microsoft.aspnetcore.authentication.jwtbearer.8.0.34.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.bcl.cryptography\\8.0.0\\microsoft.bcl.cryptography.8.0.0.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.data.sqlclient\\7.1.1\\microsoft.data.sqlclient.7.1.1.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.data.sqlclient.extensions.abstractions\\7.1.1\\microsoft.data.sqlclient.extensions.abstractions.7.1.1.nupkg.sha512",
