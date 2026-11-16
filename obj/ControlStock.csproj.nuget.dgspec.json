@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {}
+    "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {}
   },
   "projects": {
-    "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {
+    "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+        "projectUniqueName": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
         "projectName": "ControlStock",
-        "projectPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+        "projectPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
         "packagesPath": "C:\\Users\\edwin.perez\\.nuget\\packages\\",
-        "outputPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
+        "outputPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\edwin.perez\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -46,9 +46,17 @@
           "framework": "net8.0",
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.89, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.34, )"
             },
             "Microsoft.Data.SqlClient": {
               "target": "Package",

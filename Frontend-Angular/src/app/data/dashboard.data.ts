@@ -9,15 +9,21 @@ import {
   LucideSettings2,
   LucideShoppingBag,
   LucideShoppingCart,
+  LucideUserCog,
   LucideUsers,
   LucideWarehouse,
   LucideIcon,
 } from '@lucide/angular';
+import type { Rol } from '../services/auth.service';
+
+const ESCRITURA: Rol[] = ['Administrador', 'Operador'];
 
 export interface NavigationItem {
   label: string;
   icon: LucideIcon;
   href: string;
+  /** Roles que ven el ítem. Sin definir = todos los usuarios autenticados. */
+  roles?: Rol[];
 }
 
 export interface NavigationGroup {
@@ -33,8 +39,8 @@ export const navigationGroups: NavigationGroup[] = [
   {
     label: 'Operaciones',
     items: [
-      { label: 'Punto de venta', icon: LucideShoppingCart, href: '/ventas/nueva' },
-      { label: 'Órdenes de compra', icon: LucideShoppingBag, href: '/compras' },
+      { label: 'Punto de venta', icon: LucideShoppingCart, href: '/ventas/nueva', roles: ESCRITURA },
+      { label: 'Órdenes de compra', icon: LucideShoppingBag, href: '/compras', roles: ESCRITURA },
     ],
   },
   {
@@ -49,7 +55,7 @@ export const navigationGroups: NavigationGroup[] = [
     label: 'Inventario',
     items: [
       { label: 'Almacenes', icon: LucideWarehouse, href: '/inventario/almacenes' },
-      { label: 'Movimientos', icon: LucideActivity, href: '/inventario/movimientos' },
+      { label: 'Movimientos', icon: LucideActivity, href: '/inventario/movimientos', roles: ESCRITURA },
       { label: 'Reposición', icon: LucideBoxes, href: '/inventario/reposicion' },
     ],
   },
@@ -62,7 +68,10 @@ export const navigationGroups: NavigationGroup[] = [
   },
   {
     label: 'Administración',
-    items: [{ label: 'Configuración', icon: LucideSettings2, href: '/configuracion' }],
+    items: [
+      { label: 'Usuarios', icon: LucideUserCog, href: '/usuarios', roles: ['Administrador'] },
+      { label: 'Configuración', icon: LucideSettings2, href: '/configuracion', roles: ['Administrador'] },
+    ],
   },
 ];
 

@@ -1,0 +1,146 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> ADMINISTRACIÓN</div>
+      <h1>Usuarios</h1>
+      <p>Crea cuentas y asigna roles: Administrador, Operador o Consulta.</p>
+    </div>
+    <button class="primary-button" (click)="openCreate()">
+      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+      Nuevo usuario
+    </button>
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <span class="products-count">{{ usuarios().length }} usuarios</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando usuarios…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudieron cargar los usuarios</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        <div class="table-scroll">
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th><span class="sr-only">Acciones</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (u of usuarios(); track u.usuario_id) {
+                <tr>
+                  <td>
+                    <strong>{{ u.nombre }}</strong>
+                    <small>{{ u.email }}</small>
+                  </td>
+                  <td>{{ u.rol }}</td>
+                  <td>
+                    <span class="badge" [class.badge-off]="!u.activo">{{ u.activo ? 'Activo' : 'Inactivo' }}</span>
+                  </td>
+                  <td class="actions">
+                    <button class="icon-button" [attr.aria-label]="'Editar ' + u.nombre" title="Editar" (click)="openEdit(u)">
+                      <svg lucidePencil [size]="16"></svg>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  </section>
+</div>
+
+@if (modalOpen()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <form
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="editing() ? 'Editar usuario' : 'Nuevo usuario'"
+      [formGroup]="form"
+      (click)="$event.stopPropagation()"
+      (ngSubmit)="save()"
+      novalidate
+    >
+      <div class="modal-head">
+        <h2>{{ editing() ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="closeModal()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <label class="field">
+          <span>Nombre</span>
+          <input formControlName="nombre" maxlength="100" [class.invalid]="invalid('nombre')" />
+          @if (invalid('nombre')) { <em>El nombre es requerido.</em> }
+        </label>
+
+        <label class="field">
+          <span>Correo electrónico</span>
+          <input type="email" formControlName="email" maxlength="150" [class.invalid]="invalid('email')" />
+          @if (invalid('email')) { <em>Ingresa un correo válido.</em> }
+        </label>
+
+        <label class="field">
+          <span>{{ editing() ? 'Nueva contraseña (opcional)' : 'Contraseña' }}</span>
+          <input type="password" formControlName="password" autocomplete="new-password" [class.invalid]="invalid('password')" />
+          @if (invalid('password')) { <em>Mínimo 8 caracteres.</em> }
+        </label>
+
+        <label class="field">
+          <span>Rol</span>
+          <select formControlName="rol_id" [class.invalid]="invalid('rol_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (r of roles(); track r.id) {
+              <option [ngValue]="r.id">{{ r.nombre }}</option>
+            }
+          </select>
+          @if (invalid('rol_id')) { <em>Selecciona un rol.</em> }
+        </label>
+
+        @if (editing()) {
+          <label class="field">
+            <span>Estado</span>
+            <select formControlName="activo" [attr.disabled]="editing()?.usuario_id === currentUserId() ? '' : null">
+              <option [ngValue]="true">Activo</option>
+              <option [ngValue]="false">Inactivo</option>
+            </select>
+          </label>
+        }
+      </div>
+
+      @if (formError()) {
+        <div class="form-error" role="alert">{{ formError() }}</div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-button" (click)="closeModal()" [disabled]="saving()">Cancelar</button>
+        <button type="submit" class="primary-button" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : editing() ? 'Guardar cambios' : 'Crear usuario' }}
+        </button>
+      </div>
+    </form>
+  </div>
+}

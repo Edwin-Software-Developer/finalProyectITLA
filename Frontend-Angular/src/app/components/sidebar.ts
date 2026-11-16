@@ -1,14 +1,15 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import {
   LucideActivity,
   LucideArrowRight,
   LucideChevronDown,
   LucideCircleHelp,
   LucideDynamicIcon,
-  LucidePanelLeftClose,
+  LucideLogOut,
   LucideX,
 } from '@lucide/angular';
 import { navigationGroups } from '../data/dashboard.data';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,7 +19,7 @@ import { navigationGroups } from '../data/dashboard.data';
     LucideChevronDown,
     LucideCircleHelp,
     LucideDynamicIcon,
-    LucidePanelLeftClose,
+    LucideLogOut,
     LucideX,
   ],
   styles: [':host { display: contents; }'],
@@ -52,7 +53,7 @@ import { navigationGroups } from '../data/dashboard.data';
       </div>
 
       <nav aria-label="Navegación principal" class="sidebar-nav">
-        @for (group of groups; track group.label) {
+        @for (group of groups(); track group.label) {
           <div class="nav-group">
             <p class="nav-heading">{{ group.label }}</p>
             @for (item of group.items; track item.label) {
@@ -84,13 +85,13 @@ import { navigationGroups } from '../data/dashboard.data';
           <svg lucideArrowRight [size]="15"></svg>
         </div>
         <div class="profile">
-          <div class="avatar avatar-user">EP</div>
+          <div class="avatar avatar-user">{{ auth.initials() }}</div>
           <div class="profile-copy">
-            <strong>Edwin Pérez</strong>
-            <span>Administrador</span>
+            <strong>{{ auth.user()?.nombre }}</strong>
+            <span>{{ auth.user()?.rol }}</span>
           </div>
-          <button aria-label="Opciones de perfil" class="icon-button profile-menu">
-            <svg lucidePanelLeftClose [size]="17"></svg>
+          <button aria-label="Cerrar sesión" title="Cerrar sesión" class="icon-button profile-menu" (click)="auth.logout()">
+            <svg lucideLogOut [size]="17"></svg>
           </button>
         </div>
       </div>
@@ -100,5 +101,13 @@ import { navigationGroups } from '../data/dashboard.data';
 export class Sidebar {
   readonly open = input(false);
   readonly closed = output<void>();
-  protected readonly groups = navigationGroups;
+  protected readonly auth = inject(AuthService);
+
+  /** Solo los ítems permitidos para el rol actual; los grupos que quedan vacíos se ocultan. */
+  protected readonly groups = computed(() => {
+    const rol = this.auth.user()?.rol;
+    return navigationGroups
+      .map((g) => ({ ...g, items: g.items.filter((i) => !i.roles || (rol && i.roles.includes(rol))) }))
+      .filter((g) => g.items.length > 0);
+  });
 }
