@@ -1,0 +1,115 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> OPERACIONES</div>
+      <h1>Punto de venta</h1>
+      <p>Busca productos (<kbd>F2</kbd>), agrégalos al carrito y cobra. El inventario se descuenta al instante.</p>
+    </div>
+  </div>
+
+  @if (aviso(); as a) {
+    <div class="notice" role="status">{{ a }}</div>
+  }
+  @if (error(); as e) {
+    <div class="notice notice-error" role="alert">{{ e }}</div>
+  }
+
+  <div class="pos">
+    <section class="panel catalogo">
+      <div class="catalogo-bar">
+        <input
+          #buscador
+          type="search"
+          placeholder="Buscar por nombre o SKU… (Enter agrega el resultado único)"
+          aria-label="Buscar producto"
+          (input)="onBuscar($event)"
+          (keydown.enter)="enterBuscador()"
+        />
+        <select aria-label="Almacén" (change)="onAlmacen($event)">
+          @for (a of almacenes(); track a.id) {
+            <option [value]="a.id" [selected]="a.id === almacenId()">{{ a.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      @if (errorCarga()) {
+        <div class="vacio" role="alert">{{ errorCarga() }}</div>
+      } @else if (cargando()) {
+        <div class="vacio">Cargando productos…</div>
+      } @else if (visibles().length === 0) {
+        <div class="vacio">No hay productos que coincidan.</div>
+      } @else {
+        <div class="grid-productos">
+          @for (p of visibles(); track p.producto_id) {
+            <button type="button" class="tarjeta" [disabled]="p.disponible <= 0 || enCarrito(p) >= p.disponible" (click)="agregar(p)">
+              <strong>{{ p.nombre }}</strong>
+              <small>{{ p.sku }} · {{ p.categoria }}</small>
+              <span class="precio">{{ p.precio_venta | number: '1.2-2' }}</span>
+              <span class="stock" [class.sin-stock]="p.disponible <= 0">
+                {{ p.disponible > 0 ? p.disponible + ' disp.' : 'Sin stock' }}
+                @if (enCarrito(p) > 0) { · {{ enCarrito(p) }} en carrito }
+              </span>
+            </button>
+          }
+        </div>
+      }
+    </section>
+
+    <aside class="panel carrito" aria-label="Carrito">
+      <div class="carrito-head">
+        <h2><svg lucideShoppingCart [size]="18"></svg> Carrito <span>({{ unidades() }})</span></h2>
+        @if (carrito().length > 0) {
+          <button type="button" class="link" (click)="vaciar()">Vaciar</button>
+        }
+      </div>
+
+      <label class="cliente">
+        <span>Cliente (opcional)</span>
+        <select (change)="onCliente($event)">
+          <option value="0">Consumidor final</option>
+          @for (c of clientes(); track c.id) {
+            <option [value]="c.id">{{ c.nombre }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="items">
+        @for (l of lineas(); track l.producto.producto_id) {
+          <div class="item">
+            <div class="item-top">
+              <div>
+                <strong>{{ l.producto.nombre }}</strong>
+                <small>{{ l.producto.precio_venta | number: '1.2-2' }} c/u · ITBIS {{ l.producto.porcentaje_impuesto }}%</small>
+              </div>
+              <button type="button" class="icon-button" aria-label="Quitar" (click)="quitar(l)"><svg lucideTrash2 [size]="15"></svg></button>
+            </div>
+            <div class="item-controls">
+              <div class="qty">
+                <button type="button" aria-label="Menos" (click)="sumar(l, -1)"><svg lucideMinus [size]="14"></svg></button>
+                <input type="number" min="1" [max]="l.producto.disponible" step="any" [value]="l.cantidad" (change)="cambiarCantidad(l, num($event))" aria-label="Cantidad" />
+                <button type="button" aria-label="Más" (click)="sumar(l, 1)"><svg lucidePlus [size]="14"></svg></button>
+              </div>
+              <label class="desc">
+                Desc. %
+                <input type="number" min="0" max="100" step="any" [value]="l.descuento" (change)="cambiarDescuento(l, num($event))" />
+              </label>
+              <strong class="linea-total">{{ l.total | number: '1.2-2' }}</strong>
+            </div>
+          </div>
+        } @empty {
+          <div class="vacio">El carrito está vacío.</div>
+        }
+      </div>
+
+      <div class="totales">
+        <div><span>Subtotal</span><span>{{ subtotal() | number: '1.2-2' }}</span></div>
+        <div><span>Impuestos</span><span>{{ impuestos() | number: '1.2-2' }}</span></div>
+        <div class="gran-total"><span>Total</span><span>{{ total() | number: '1.2-2' }}</span></div>
+      </div>
+
+      <button type="button" class="primary-button cobrar" [disabled]="carrito().length === 0 || cobrando()" (click)="cobrar()">
+        {{ cobrando() ? 'Registrando…' : 'Cobrar ' + (total() | number: '1.2-2') }}
+      </button>
+    </aside>
+  </div>
+</div>

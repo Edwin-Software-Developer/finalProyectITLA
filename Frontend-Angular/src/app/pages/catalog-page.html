@@ -1,0 +1,161 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> {{ cfg.eyebrow }}</div>
+      <h1>{{ cfg.title }}</h1>
+      <p>{{ cfg.subtitle }}</p>
+    </div>
+    @if (canWrite()) {
+      <button class="primary-button" (click)="openCreate()">
+        <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+        {{ cfg.nuevo }}
+      </button>
+    }
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <label class="products-search">
+        <input type="search" placeholder="Buscar…" [value]="search()" (input)="onSearch($event)" />
+      </label>
+      <span class="products-count">{{ filtered().length }} de {{ rows().length }}</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudo cargar {{ cfg.title.toLowerCase() }}</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        @if (filtered().length === 0) {
+          <div class="products-empty">
+            {{ rows().length === 0 ? 'Todavía no hay registros.' : 'Ningún resultado coincide con la búsqueda.' }}
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  @for (c of columns; track c.key) {
+                    <th>{{ c.label }}</th>
+                  }
+                  @if (cfg.hasActivo) {
+                    <th>Estado</th>
+                  }
+                  <th><span class="sr-only">Acciones</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of filtered(); track id(r)) {
+                  <tr>
+                    @for (c of columns; track c.key; let first = $first) {
+                      <td>
+                        @if (first) {
+                          <strong>{{ celda(r, c) }}</strong>
+                        } @else {
+                          {{ celda(r, c) }}
+                        }
+                      </td>
+                    }
+                    @if (cfg.hasActivo) {
+                      <td>
+                        <span class="badge" [class.badge-off]="!r['activo']">{{ r['activo'] ? 'Activo' : 'Inactivo' }}</span>
+                      </td>
+                    }
+                    <td class="actions">
+                      @if (canWrite()) {
+                        <button class="icon-button" [attr.aria-label]="'Editar ' + r['nombre']" title="Editar" (click)="openEdit(r)">
+                          <svg lucidePencil [size]="16"></svg>
+                        </button>
+                      }
+                      @if (isAdmin()) {
+                        <button class="icon-button icon-danger" [attr.aria-label]="'Eliminar ' + r['nombre']" title="Eliminar" (click)="remove(r)">
+                          <svg lucideTrash2 [size]="16"></svg>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+</div>
+
+@if (modalOpen()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <form
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="editing() ? 'Editar ' + cfg.singular : cfg.nuevo"
+      [formGroup]="form"
+      (click)="$event.stopPropagation()"
+      (ngSubmit)="save()"
+      novalidate
+    >
+      <div class="modal-head">
+        <h2>{{ editing() ? 'Editar ' + cfg.singular : cfg.nuevo }}</h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="closeModal()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        @for (f of cfg.fields; track f.key) {
+          <label class="field">
+            <span>{{ f.label }}</span>
+            @if (f.type === 'bool') {
+              <select [formControlName]="f.key">
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            } @else if (f.type === 'number') {
+              <input type="number" [formControlName]="f.key" [attr.min]="f.min" [attr.max]="f.max" [attr.step]="f.step ?? 'any'" [class.invalid]="invalid(f.key)" />
+            } @else {
+              <input [type]="f.type ?? 'text'" [formControlName]="f.key" [attr.maxlength]="f.max" [class.invalid]="invalid(f.key)" />
+            }
+            @if (invalid(f.key)) { <em>{{ errorText(f.key, f.label) }}</em> }
+          </label>
+        }
+
+        @if (cfg.hasActivo && editing()) {
+          <label class="field">
+            <span>Estado</span>
+            <select formControlName="activo">
+              <option [ngValue]="true">Activo</option>
+              <option [ngValue]="false">Inactivo</option>
+            </select>
+          </label>
+        }
+      </div>
+
+      @if (formError()) {
+        <div class="form-error" role="alert">{{ formError() }}</div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-button" (click)="closeModal()" [disabled]="saving()">Cancelar</button>
+        <button type="submit" class="primary-button" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : editing() ? 'Guardar cambios' : 'Crear' }}
+        </button>
+      </div>
+    </form>
+  </div>
+}

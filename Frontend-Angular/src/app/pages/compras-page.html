@@ -1,0 +1,277 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> OPERACIONES</div>
+      <h1>Órdenes de compra</h1>
+      <p>Pide mercancía a tus proveedores y regístrala al recibirla para actualizar el inventario.</p>
+    </div>
+    <button class="primary-button" (click)="openNueva()">
+      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+      Nueva orden
+    </button>
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <select class="products-select" aria-label="Estado" (change)="onEstado($event)">
+        <option value="">Todos los estados</option>
+        @for (e of estados; track e) {
+          <option [value]="e">{{ etiqueta[e] }}</option>
+        }
+      </select>
+      <span class="products-count">{{ filtradas().length }} órdenes</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando órdenes…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudieron cargar las órdenes</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        @if (filtradas().length === 0) {
+          <div class="products-empty">
+            {{ ordenes().length === 0 ? 'Todavía no hay órdenes de compra.' : 'Ninguna orden coincide con el filtro.' }}
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Orden</th>
+                  <th>Proveedor</th>
+                  <th>Almacén</th>
+                  <th>Entrega esperada</th>
+                  <th>Estado</th>
+                  <th class="num">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (o of filtradas(); track o.orden_id) {
+                  <tr class="fila-click" tabindex="0" (click)="abrir(o)" (keydown.enter)="abrir(o)">
+                    <td>
+                      <strong>{{ o.numero_orden }}</strong>
+                      <small>{{ o.fecha + 'Z' | date: 'dd/MM/yyyy HH:mm' }} · {{ o.lineas }} líneas{{ o.origen === 'AUTO' ? ' · sugerida' : '' }}</small>
+                    </td>
+                    <td>{{ o.proveedor }}</td>
+                    <td>{{ o.almacen }}</td>
+                    <td>{{ o.fecha_entrega_esperada ? (o.fecha_entrega_esperada | date: 'dd/MM/yyyy') : '—' }}</td>
+                    <td><span class="estado" [class]="'estado estado-' + o.estado">{{ etiqueta[o.estado] }}</span></td>
+                    <td class="num">{{ o.moneda_simbolo }} {{ o.total | number: '1.2-2' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+</div>
+
+<!-- ============ Nueva orden ============ -->
+@if (modalNueva()) {
+  <div class="modal-backdrop" (click)="cerrar()">
+    <form
+      class="modal modal-wide"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Nueva orden de compra"
+      [formGroup]="form"
+      (click)="$event.stopPropagation()"
+      (ngSubmit)="guardar()"
+      novalidate
+    >
+      <div class="modal-head">
+        <h2>Nueva orden de compra</h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="cerrar()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <label class="field">
+          <span>Proveedor</span>
+          <select formControlName="proveedor_id" [class.invalid]="invalid('proveedor_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (p of proveedores(); track p.id) {
+              <option [ngValue]="p.id">{{ p.nombre }}</option>
+            }
+          </select>
+          @if (invalid('proveedor_id')) { <em>Selecciona un proveedor.</em> }
+        </label>
+
+        <label class="field">
+          <span>Almacén de destino</span>
+          <select formControlName="almacen_id" [class.invalid]="invalid('almacen_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (a of almacenes(); track a.id) {
+              <option [ngValue]="a.id">{{ a.nombre }}</option>
+            }
+          </select>
+          @if (invalid('almacen_id')) { <em>Selecciona el almacén.</em> }
+        </label>
+
+        <label class="field">
+          <span>Moneda</span>
+          <select formControlName="moneda_id" [class.invalid]="invalid('moneda_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (m of monedas(); track m.id) {
+              <option [ngValue]="m.id">{{ m.nombre }}</option>
+            }
+          </select>
+          @if (invalid('moneda_id')) { <em>Selecciona una moneda (configúralas en Configuración).</em> }
+        </label>
+
+        <label class="field">
+          <span>Entrega esperada</span>
+          <input type="date" formControlName="fecha_entrega_esperada" />
+        </label>
+      </div>
+
+      <div class="barra">
+        <button type="button" class="ghost-button" (click)="agregarLinea()">
+          <svg lucidePlus [size]="15"></svg> Agregar producto
+        </button>
+        <button type="button" class="ghost-button" (click)="cargarSugeridos()" [disabled]="cargandoSugeridos()">
+          <svg lucideSparkles [size]="15"></svg> {{ cargandoSugeridos() ? 'Cargando…' : 'Cargar sugeridos de reposición' }}
+        </button>
+      </div>
+
+      <div formArrayName="lineas">
+        @for (g of lineas.controls; track $index; let i = $index) {
+          <div class="linea" [formGroupName]="i">
+            <label class="field">
+              <span>Producto</span>
+              <select formControlName="producto_id" (change)="onProducto(i)" [class.invalid]="lineaInvalida(i, 'producto_id')">
+                <option [ngValue]="0" disabled>Selecciona…</option>
+                @for (p of productos(); track p.producto_id) {
+                  <option [ngValue]="p.producto_id">{{ p.sku }} · {{ p.nombre }}</option>
+                }
+              </select>
+            </label>
+            <label class="field">
+              <span>Cantidad</span>
+              <input type="number" min="0" step="any" formControlName="cantidad" (input)="recalcular()" [class.invalid]="lineaInvalida(i, 'cantidad')" />
+            </label>
+            <label class="field">
+              <span>Costo unit.</span>
+              <input type="number" min="0" step="any" formControlName="costo_unitario" (input)="recalcular()" [class.invalid]="lineaInvalida(i, 'costo_unitario')" />
+            </label>
+            <label class="field">
+              <span>Desc. %</span>
+              <input type="number" min="0" max="100" step="any" formControlName="descuento_porcentaje" (input)="recalcular()" [class.invalid]="lineaInvalida(i, 'descuento_porcentaje')" />
+            </label>
+            <button type="button" class="icon-button icon-danger" aria-label="Quitar línea" title="Quitar" [disabled]="lineas.length === 1" (click)="quitarLinea(i)">
+              <svg lucideTrash2 [size]="16"></svg>
+            </button>
+          </div>
+        }
+      </div>
+      <div class="totales">Subtotal estimado: {{ subtotalEstimado() | number: '1.2-2' }} <small>(los impuestos se calculan al guardar)</small></div>
+
+      <label class="field">
+        <span>Notas</span>
+        <input formControlName="notas" maxlength="500" />
+      </label>
+
+      @if (formError()) {
+        <div class="form-error" role="alert">{{ formError() }}</div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-button" (click)="cerrar()" [disabled]="saving()">Cancelar</button>
+        <button type="submit" class="primary-button" [disabled]="saving()">
+          {{ saving() ? 'Guardando…' : 'Crear orden' }}
+        </button>
+      </div>
+    </form>
+  </div>
+}
+
+<!-- ============ Detalle / recepción ============ -->
+@if (detalle(); as d) {
+  <div class="modal-backdrop" (click)="cerrar()">
+    <div class="modal modal-wide" role="dialog" aria-modal="true" [attr.aria-label]="'Orden ' + d.orden.numero_orden" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2>{{ d.orden.numero_orden }} <span class="estado" [class]="'estado estado-' + d.orden.estado">{{ etiqueta[d.orden.estado] }}</span></h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="cerrar()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="resumen">
+        <span>Proveedor: <strong>{{ d.orden.proveedor }}</strong></span>
+        <span>Destino: <strong>{{ d.orden.almacen }}</strong></span>
+        <span>Fecha: {{ d.orden.fecha + 'Z' | date: 'dd/MM/yyyy HH:mm' }}</span>
+        @if (d.orden.notas) { <span>Notas: {{ d.orden.notas }}</span> }
+      </div>
+
+      <div class="table-scroll">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="num">Pedido</th>
+              <th class="num">Recibido</th>
+              <th class="num">Costo</th>
+              <th class="num">Total línea</th>
+              @if (puedeRecibir(d)) { <th class="num">Recibir ahora</th> }
+            </tr>
+          </thead>
+          <tbody>
+            @for (l of d.lineas; track l.detalle_id) {
+              <tr>
+                <td><strong>{{ l.producto }}</strong><small>{{ l.sku }}</small></td>
+                <td class="num">{{ l.cantidad_pedida | number: '1.0-2' }}</td>
+                <td class="num">{{ l.cantidad_recibida | number: '1.0-2' }}</td>
+                <td class="num">{{ l.costo_unitario | number: '1.2-4' }}</td>
+                <td class="num">{{ l.total_linea | number: '1.2-2' }}</td>
+                @if (puedeRecibir(d)) {
+                  <td class="num recibir">
+                    @if (pendiente(l) > 0) {
+                      <input type="number" min="0" [max]="pendiente(l)" step="any" [value]="recibir()[l.detalle_id]" (input)="onRecibir(l.detalle_id, $event)" [attr.aria-label]="'Cantidad a recibir de ' + l.producto" />
+                    } @else { — }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="totales">
+        Subtotal {{ d.orden.moneda_simbolo }} {{ d.orden.subtotal | number: '1.2-2' }} ·
+        Impuestos {{ d.orden.impuesto_total | number: '1.2-2' }} ·
+        Total {{ d.orden.moneda_simbolo }} {{ d.orden.total | number: '1.2-2' }}
+      </div>
+
+      @if (detalleError()) {
+        <div class="form-error" role="alert">{{ detalleError() }}</div>
+      }
+
+      <div class="modal-actions">
+        @if (puedeCancelar(d)) {
+          <button type="button" class="ghost-button" (click)="cancelarOrden(d)" [disabled]="procesando()">Cancelar orden</button>
+        }
+        <button type="button" class="ghost-button" (click)="cerrar()" [disabled]="procesando()">Cerrar</button>
+        @if (puedeRecibir(d)) {
+          <button type="button" class="primary-button" (click)="confirmarRecepcion(d)" [disabled]="procesando()">
+            {{ procesando() ? 'Registrando…' : 'Registrar recepción' }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}
