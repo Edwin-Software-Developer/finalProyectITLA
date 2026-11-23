@@ -1972,11 +1972,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+      "projectUniqueName": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
       "projectName": "ControlStock",
-      "projectPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+      "projectPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
       "packagesPath": "C:\\Users\\edwin.perez\\.nuget\\packages\\",
-      "outputPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
+      "outputPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\edwin.perez\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -7,6 +7,7 @@ import {
   LucideLayoutDashboard,
   LucidePackage,
   LucideSettings2,
+  LucideReceipt,
   LucideShoppingBag,
   LucideShoppingCart,
   LucideSparkles,
@@ -40,6 +41,7 @@ export const navigationGroups: NavigationGroup[] = [
   {
     label: 'Operaciones',
     items: [
+      { label: 'Historial de ventas', icon: LucideReceipt, href: '/ventas', roles: ESCRITURA },
       { label: 'Punto de venta', icon: LucideShoppingCart, href: '/ventas/nueva', roles: ESCRITURA },
       { label: 'Órdenes de compra', icon: LucideShoppingBag, href: '/compras', roles: ESCRITURA },
     ],

@@ -1,0 +1,173 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> INVENTARIO</div>
+      <h1>Reposición</h1>
+      <p>Existencias por almacén, reglas de stock y cantidad sugerida para reponer.</p>
+    </div>
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <label class="products-search">
+        <input type="search" placeholder="Buscar por producto o SKU…" [value]="search()" (input)="onSearch($event)" />
+      </label>
+      <select class="products-select" aria-label="Almacén" (change)="onAlmacen($event)">
+        <option value="0">Todos los almacenes</option>
+        @for (a of almacenes(); track a.id) {
+          <option [value]="a.id">{{ a.nombre }}</option>
+        }
+      </select>
+      <select class="products-select" aria-label="Estado" (change)="onEstado($event)">
+        <option value="">Todos los estados</option>
+        <option value="atencion">Requieren atención ({{ resumen().critico + resumen().bajo + resumen().reponer }})</option>
+        <option value="critico">Crítico ({{ resumen().critico }})</option>
+        <option value="bajo">Bajo mínimo ({{ resumen().bajo }})</option>
+        <option value="reponer">Reponer ({{ resumen().reponer }})</option>
+        <option value="sobrestock">Sobrestock ({{ resumen().sobrestock }})</option>
+        <option value="ok">Normal</option>
+        <option value="sin_regla">Sin regla</option>
+      </select>
+      <span class="products-count">{{ filtradas().length }} de {{ filas().length }}</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando inventario…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudo cargar el inventario</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        @if (filtradas().length === 0) {
+          <div class="products-empty">Ningún producto coincide con los filtros.</div>
+        } @else {
+          <div class="table-scroll">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Almacén</th>
+                  <th class="num">Existencia</th>
+                  <th class="num">Reservado</th>
+                  <th>Regla (mín · reorden · máx)</th>
+                  <th>Estado</th>
+                  <th class="num">Sugerido</th>
+                  <th><span class="sr-only">Acciones</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (f of filtradas(); track f.producto_id + '-' + f.almacen_id) {
+                  <tr>
+                    <td>
+                      <strong>{{ f.nombre }}</strong>
+                      <small>{{ f.sku }} · {{ f.categoria }}</small>
+                    </td>
+                    <td>{{ f.almacen }}</td>
+                    <td class="num">{{ f.cantidad_actual | number: '1.0-2' }} <small>{{ f.unidad_medida }}</small></td>
+                    <td class="num">{{ f.cantidad_reservada | number: '1.0-2' }}</td>
+                    <td class="regla">
+                      @if (f.stock_minimo !== null) {
+                        {{ f.stock_minimo | number: '1.0-2' }} · {{ f.punto_reorden | number: '1.0-2' }} · {{ f.stock_maximo | number: '1.0-2' }}
+                        <small>seguridad {{ f.stock_seguridad | number: '1.0-2' }}{{ f.pedido_automatico ? ' · pedido automático' : '' }}</small>
+                      } @else {
+                        —
+                      }
+                    </td>
+                    <td><span class="estado" [class]="'estado estado-' + f.estado">{{ etiqueta[f.estado] }}</span></td>
+                    <td class="num">{{ f.sugerido > 0 ? (f.sugerido | number: '1.0-2') : '—' }}</td>
+                    <td class="actions">
+                      @if (canWrite()) {
+                        <button class="icon-button" [attr.aria-label]="'Editar regla de ' + f.nombre" title="Editar regla" (click)="openEdit(f)">
+                          <svg lucidePencil [size]="16"></svg>
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+</div>
+
+@if (modalOpen()) {
+  @if (editing(); as f) {
+    <div class="modal-backdrop" (click)="closeModal()">
+      <form
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Regla de reposición"
+        [formGroup]="form"
+        (click)="$event.stopPropagation()"
+        (ngSubmit)="save()"
+        novalidate
+      >
+        <div class="modal-head">
+          <h2>Regla de reposición</h2>
+          <button type="button" class="icon-button" aria-label="Cerrar" (click)="closeModal()">
+            <svg lucideX [size]="18"></svg>
+          </button>
+        </div>
+
+        <div class="form-grid">
+          <p class="hint"><strong>{{ f.nombre }}</strong> · {{ f.almacen }} · existencia actual {{ f.cantidad_actual | number: '1.0-2' }}</p>
+
+          <label class="field">
+            <span>Stock mínimo</span>
+            <input type="number" min="0" step="any" formControlName="stock_minimo" [class.invalid]="invalid('stock_minimo')" />
+            @if (invalid('stock_minimo')) { <em>Ingresa un número mayor o igual a 0.</em> }
+          </label>
+          <label class="field">
+            <span>Stock de seguridad</span>
+            <input type="number" min="0" step="any" formControlName="stock_seguridad" [class.invalid]="invalid('stock_seguridad')" />
+            @if (invalid('stock_seguridad')) { <em>Ingresa un número mayor o igual a 0.</em> }
+          </label>
+          <label class="field">
+            <span>Punto de reorden</span>
+            <input type="number" min="0" step="any" formControlName="punto_reorden" [class.invalid]="invalid('punto_reorden')" />
+            @if (invalid('punto_reorden')) { <em>Ingresa un número mayor o igual a 0.</em> }
+          </label>
+          <label class="field">
+            <span>Stock máximo</span>
+            <input type="number" min="0" step="any" formControlName="stock_maximo" [class.invalid]="invalid('stock_maximo')" />
+            @if (invalid('stock_maximo')) { <em>Ingresa un número mayor o igual a 0.</em> }
+          </label>
+          <label class="field">
+            <span>Pedido automático</span>
+            <select formControlName="pedido_automatico">
+              <option [ngValue]="true">Sí</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </label>
+        </div>
+
+        @if (formError()) {
+          <div class="form-error" role="alert">{{ formError() }}</div>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="ghost-button" (click)="closeModal()" [disabled]="saving()">Cancelar</button>
+          <button type="submit" class="primary-button" [disabled]="saving()">
+            {{ saving() ? 'Guardando…' : 'Guardar regla' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+}

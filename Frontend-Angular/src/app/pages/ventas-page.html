@@ -1,0 +1,147 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> OPERACIONES</div>
+      <h1>Historial de ventas</h1>
+      <p>Últimas 200 ventas. Abre una para ver el detalle{{ isAdmin() ? ' o anularla' : '' }}.</p>
+    </div>
+    <a class="primary-button" routerLink="/ventas/nueva">
+      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+      Nueva venta
+    </a>
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <label class="products-search">
+        <input type="search" placeholder="Buscar por factura o cliente…" [value]="search()" (input)="onSearch($event)" />
+      </label>
+      <select class="products-select" aria-label="Estado" (change)="onEstado($event)">
+        <option value="">Todos los estados</option>
+        <option value="COMPLETADA">Completadas</option>
+        <option value="ANULADA">Anuladas</option>
+      </select>
+      <span class="products-count">{{ filtradas().length }} ventas</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando ventas…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudo cargar el historial</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        @if (filtradas().length === 0) {
+          <div class="products-empty">{{ ventas().length === 0 ? 'Todavía no hay ventas.' : 'Ninguna venta coincide con los filtros.' }}</div>
+        } @else {
+          <div class="table-scroll">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Factura</th>
+                  <th>Cliente</th>
+                  <th>Almacén</th>
+                  <th>Vendedor</th>
+                  <th>Estado</th>
+                  <th class="num">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (v of filtradas(); track v.venta_id) {
+                  <tr class="fila-click" tabindex="0" (click)="abrir(v)" (keydown.enter)="abrir(v)">
+                    <td>
+                      <strong>{{ v.numero_factura }}</strong>
+                      <small>{{ v.fecha + 'Z' | date: 'dd/MM/yyyy HH:mm' }}</small>
+                    </td>
+                    <td>{{ v.cliente || 'Consumidor final' }}</td>
+                    <td>{{ v.almacen }}</td>
+                    <td>{{ v.usuario }}</td>
+                    <td><span class="estado" [class]="'estado estado-' + v.estado">{{ v.estado === 'ANULADA' ? 'Anulada' : 'Completada' }}</span></td>
+                    <td class="num">{{ v.moneda_simbolo }} {{ v.total | number: '1.2-2' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+</div>
+
+@if (detalle(); as d) {
+  <div class="modal-backdrop" (click)="cerrar()">
+    <div class="modal modal-wide" role="dialog" aria-modal="true" [attr.aria-label]="'Venta ' + d.venta.numero_factura" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h2>{{ d.venta.numero_factura }} <span class="estado" [class]="'estado estado-' + d.venta.estado">{{ d.venta.estado === 'ANULADA' ? 'Anulada' : 'Completada' }}</span></h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="cerrar()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="resumen">
+        <span>Cliente: <strong>{{ d.venta.cliente || 'Consumidor final' }}</strong></span>
+        <span>Almacén: <strong>{{ d.venta.almacen }}</strong></span>
+        <span>Vendedor: {{ d.venta.usuario }}</span>
+        <span>{{ d.venta.fecha + 'Z' | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+      <div class="table-scroll">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th class="num">Cant.</th>
+              <th class="num">Precio</th>
+              <th class="num">Desc. %</th>
+              <th class="num">ITBIS</th>
+              <th class="num">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (l of d.lineas; track l.producto_id) {
+              <tr>
+                <td><strong>{{ l.producto }}</strong><small>{{ l.sku }}</small></td>
+                <td class="num">{{ l.cantidad | number: '1.0-2' }}</td>
+                <td class="num">{{ l.precio_unitario | number: '1.2-2' }}</td>
+                <td class="num">{{ l.descuento_porcentaje | number: '1.0-2' }}</td>
+                <td class="num">{{ l.monto_impuesto | number: '1.2-2' }}</td>
+                <td class="num">{{ l.total_linea | number: '1.2-2' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="totales">
+        Subtotal {{ d.venta.moneda_simbolo }} {{ d.venta.subtotal | number: '1.2-2' }} ·
+        Impuestos {{ d.venta.impuesto_total | number: '1.2-2' }} ·
+        Total {{ d.venta.moneda_simbolo }} {{ d.venta.total | number: '1.2-2' }}
+      </div>
+
+      @if (detalleError()) {
+        <div class="form-error" role="alert">{{ detalleError() }}</div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-button" (click)="cerrar()" [disabled]="procesando()">Cerrar</button>
+        @if (isAdmin() && d.venta.estado === 'COMPLETADA') {
+          <button type="button" class="primary-button" (click)="anular(d)" [disabled]="procesando()">
+            {{ procesando() ? 'Anulando…' : 'Anular venta' }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+}

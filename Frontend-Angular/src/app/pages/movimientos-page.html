@@ -1,0 +1,182 @@
+<div class="dashboard-content mx-auto w-full">
+  <div class="page-heading">
+    <div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> INVENTARIO</div>
+      <h1>Movimientos</h1>
+      <p>Entradas, salidas, ajustes y traslados. Cada movimiento actualiza la existencia.</p>
+    </div>
+    <button class="primary-button" (click)="openCreate()">
+      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+      Nuevo movimiento
+    </button>
+  </div>
+
+  @if (notice(); as n) {
+    <div class="notice" [class.notice-error]="n.kind === 'error'" role="status">{{ n.text }}</div>
+  }
+
+  <section class="panel products-panel">
+    <div class="products-toolbar">
+      <label class="products-search">
+        <input type="search" placeholder="Buscar por producto o SKU…" [value]="search()" (input)="onSearch($event)" />
+      </label>
+      <select class="products-select" aria-label="Tipo" (change)="onTipo($event)">
+        <option value="">Todos los tipos</option>
+        @for (t of tipos; track t) {
+          <option [value]="t">{{ etiqueta[t] }}</option>
+        }
+      </select>
+      <select class="products-select" aria-label="Almacén" (change)="onAlmacen($event)">
+        <option value="0">Todos los almacenes</option>
+        @for (a of almacenes(); track a.id) {
+          <option [value]="a.id">{{ a.nombre }}</option>
+        }
+      </select>
+      <span class="products-count">{{ filtrados().length }} movimientos</span>
+      <button class="icon-button" aria-label="Recargar" title="Recargar" (click)="load()">
+        <svg lucideRefreshCw [size]="16"></svg>
+      </button>
+    </div>
+
+    @switch (state()) {
+      @case ('loading') {
+        <div class="products-empty">Cargando movimientos…</div>
+      }
+      @case ('error') {
+        <div class="products-empty products-error" role="alert">
+          <strong>No se pudieron cargar los movimientos</strong>
+          <span>{{ loadError() }}</span>
+          <button class="primary-button" (click)="load()">Reintentar</button>
+        </div>
+      }
+      @default {
+        @if (filtrados().length === 0) {
+          <div class="products-empty">
+            {{ movimientos().length === 0 ? 'Todavía no hay movimientos.' : 'Ningún movimiento coincide con los filtros.' }}
+          </div>
+        } @else {
+          <div class="table-scroll">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Producto</th>
+                  <th>Almacén</th>
+                  <th class="num">Cantidad</th>
+                  <th>Usuario</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of filtrados(); track m.movimiento_id) {
+                  <tr>
+                    <td>{{ m.fecha + 'Z' | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td><span class="tipo" [class]="'tipo tipo-' + m.tipo">{{ etiqueta[m.tipo] }}</span></td>
+                    <td>
+                      <strong>{{ m.producto }}</strong>
+                      <small>{{ m.sku }}</small>
+                    </td>
+                    <td>{{ m.almacen }}</td>
+                    <td class="num" [class.pos]="m.cantidad > 0" [class.neg]="m.cantidad < 0">
+                      {{ m.cantidad > 0 ? '+' : '' }}{{ m.cantidad | number: '1.0-2' }}
+                    </td>
+                    <td>{{ m.usuario }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    }
+  </section>
+</div>
+
+@if (modalOpen()) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <form
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Nuevo movimiento"
+      [formGroup]="form"
+      (click)="$event.stopPropagation()"
+      (ngSubmit)="save()"
+      novalidate
+    >
+      <div class="modal-head">
+        <h2>Nuevo movimiento</h2>
+        <button type="button" class="icon-button" aria-label="Cerrar" (click)="closeModal()">
+          <svg lucideX [size]="18"></svg>
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <label class="field">
+          <span>Tipo</span>
+          <select formControlName="tipo">
+            @for (t of tipos; track t) {
+              <option [ngValue]="t">{{ etiqueta[t] }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Producto</span>
+          <select formControlName="producto_id" [class.invalid]="invalid('producto_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (p of productos(); track p.producto_id) {
+              <option [ngValue]="p.producto_id">{{ p.sku }} · {{ p.nombre }}</option>
+            }
+          </select>
+          @if (invalid('producto_id')) { <em>{{ campoError('producto_id') }}</em> }
+        </label>
+
+        <label class="field">
+          <span>{{ tipoForm() === 'TRASLADO' ? 'Almacén de origen' : 'Almacén' }}</span>
+          <select formControlName="almacen_id" [class.invalid]="invalid('almacen_id')">
+            <option [ngValue]="0" disabled>Selecciona…</option>
+            @for (a of almacenes(); track a.id) {
+              <option [ngValue]="a.id">{{ a.nombre }}</option>
+            }
+          </select>
+          @if (invalid('almacen_id')) { <em>{{ campoError('almacen_id') }}</em> }
+        </label>
+
+        @if (tipoForm() === 'TRASLADO') {
+          <label class="field">
+            <span>Almacén de destino</span>
+            <select formControlName="almacen_destino_id" [class.invalid]="invalid('almacen_destino_id')">
+              <option [ngValue]="0" disabled>Selecciona…</option>
+              @for (a of almacenes(); track a.id) {
+                <option [ngValue]="a.id">{{ a.nombre }}</option>
+              }
+            </select>
+            @if (invalid('almacen_destino_id')) { <em>{{ campoError('almacen_destino_id') }}</em> }
+          </label>
+        }
+
+        <label class="field">
+          <span>{{ tipoForm() === 'AJUSTE' ? 'Ajuste (+ suma, − resta)' : 'Cantidad' }}</span>
+          <input type="number" step="any" formControlName="cantidad" [class.invalid]="invalid('cantidad')" />
+          @if (invalid('cantidad')) { <em>{{ campoError('cantidad') }}</em> }
+        </label>
+
+        @if (tipoForm() === 'AJUSTE') {
+          <p class="hint">Usa un ajuste para corregir diferencias de conteo. Un valor negativo reduce la existencia.</p>
+        }
+      </div>
+
+      @if (formError()) {
+        <div class="form-error" role="alert">{{ formError() }}</div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" class="ghost-button" (click)="closeModal()" [disabled]="saving()">Cancelar</button>
+        <button type="submit" class="primary-button" [disabled]="saving()">
+          {{ saving() ? 'Registrando…' : 'Registrar movimiento' }}
+        </button>
+      </div>
+    </form>
+  </div>
+}
