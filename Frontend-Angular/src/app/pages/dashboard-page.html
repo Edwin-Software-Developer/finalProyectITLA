@@ -1,7 +1,7 @@
 <div class="dashboard-content mx-auto w-full">
   <div class="page-heading">
     <div>
-      <div class="eyebrow"><span class="eyebrow-dot"></span> MARTES, 14 DE OCTUBRE DE 2026</div>
+      <div class="eyebrow"><span class="eyebrow-dot"></span> {{ hoy.toUpperCase() }}</div>
       <h1>Hola, {{ firstName() }} <span class="greeting-wave">✦</span></h1>
       <p>Aquí tienes el resumen de lo que sucede en tu negocio hoy.</p>
     </div>
@@ -12,22 +12,29 @@
   </div>
 
   <section aria-label="Resumen del negocio" class="metrics-grid grid">
-    <app-metric-card
-      [icon]="icons.sales"
-      label="Ventas del mes"
-      value="RD$ 284,590"
-      change="12.8%"
-      detail="vs. mes anterior"
-      tone="blue"
-    />
-    <app-metric-card
-      [icon]="icons.report"
-      label="Ventas esta semana"
-      value="RD$ 68,240"
-      change="8.2%"
-      detail="en 486 transacciones"
-      tone="green"
-    />
+    @if (ventas(); as v) {
+      <app-metric-card
+        [icon]="icons.sales"
+        label="Ventas del mes"
+        [value]="money(v.ventasMes)"
+        [change]="pct(v.ventasMes, v.ventasMesAnterior)"
+        detail="vs. mismo tramo del mes anterior"
+        tone="blue"
+        [trend]="trend(v.ventasMes, v.ventasMesAnterior)"
+      />
+      <app-metric-card
+        [icon]="icons.report"
+        [label]="'Ventas · ' + periodLabel()"
+        [value]="money(v.totalPeriodo)"
+        [change]="pct(v.totalPeriodo, v.totalPeriodoAnterior)"
+        [detail]="'en ' + v.transaccionesPeriodo + ' transacciones'"
+        tone="green"
+        [trend]="trend(v.totalPeriodo, v.totalPeriodoAnterior)"
+      />
+    } @else {
+      <app-metric-card [icon]="icons.sales" label="Ventas del mes" value="—" change="sin datos" detail="no se pudo cargar" tone="blue" />
+      <app-metric-card [icon]="icons.report" label="Ventas del período" value="—" change="sin datos" detail="no se pudo cargar" tone="green" />
+    }
     <app-metric-card
       [icon]="icons.stock"
       label="Inventario bajo"
@@ -38,11 +45,11 @@
       trend="down"
     />
     <app-metric-card
-      [icon]="icons.ai"
-      label="Predicciones críticas"
-      value="94% precisión"
-      change="3 productos"
-      detail="demanda en aumento"
+      [icon]="icons.ticket"
+      label="Ticket promedio"
+      [value]="ventas() ? money(ticketPromedio()) : '—'"
+      [change]="ventas() ? ventas()!.transaccionesPeriodo + ' ventas' : 'sin datos'"
+      [detail]="periodLabel().toLowerCase()"
       tone="purple"
     />
   </section>
@@ -59,8 +66,8 @@
           <label class="select-wrap">
             <svg lucideCalendarDays [size]="15"></svg>
             <select aria-label="Período del resumen de ventas" (change)="onPeriodChange($event)">
-              @for (p of periods; track p) {
-                <option [selected]="p === period()">{{ p }}</option>
+              @for (p of periods; track p.dias) {
+                <option [value]="p.dias" [selected]="p.dias === dias()">{{ p.label }}</option>
               }
             </select>
             <svg lucideChevronDown [size]="14"></svg>
@@ -68,11 +75,20 @@
         </div>
       </div>
       <div class="chart-total">
-        <strong>RD$ 68,240</strong>
-        <span class="chart-growth"><svg lucideArrowUpRight [size]="14"></svg> 12.8%</span>
-        <span class="chart-period">vs. período anterior</span>
+        @if (ventas(); as v) {
+          <strong>{{ money(v.totalPeriodo) }}</strong>
+          <span class="chart-growth"><svg lucideArrowUpRight [size]="14"></svg> {{ pct(v.totalPeriodo, v.totalPeriodoAnterior) }}</span>
+          <span class="chart-period">vs. período anterior</span>
+        } @else if (ventasState() === 'loading') {
+          <span class="chart-period">Cargando ventas…</span>
+        } @else {
+          <span class="chart-period">No se pudieron cargar las ventas.</span>
+          <button class="panel-footer-link" (click)="loadVentas()">Reintentar</button>
+        }
       </div>
-      <app-sales-chart />
+      @if (ventas(); as v) {
+        <app-sales-chart [data]="v.serie" />
+      }
     </section>
 
     <section class="panel quick-panel">
@@ -109,7 +125,9 @@
   </section>
 
   <section class="bottom-grid grid">
-    <app-demand-forecast />
+    @if (ventas(); as v) {
+      <app-top-products [productos]="v.topProductos" />
+    }
     <section class="panel inventory-panel">
       <div class="panel-heading">
         <div>
@@ -166,7 +184,7 @@
     </section>
   </section>
   <footer class="dashboard-footer">
-    <span>© 2026 Nexo ERP</span>
-    <span>Datos actualizados hace 2 minutos</span>
+    <span>© {{ anio }} ControlStock</span>
+    <span>Datos en tiempo real desde la API</span>
   </footer>
 </div>

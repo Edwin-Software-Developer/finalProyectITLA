@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {}
+    "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {}
   },
   "projects": {
-    "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {
+    "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+        "projectUniqueName": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
         "projectName": "ControlStock",
-        "projectPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+        "projectPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
         "packagesPath": "C:\\Users\\edwin.perez\\.nuget\\packages\\",
-        "outputPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
+        "outputPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\edwin.perez\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -61,6 +61,10 @@
             "Microsoft.Data.SqlClient": {
               "target": "Package",
               "version": "[7.1.1, )"
+            },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2024.12.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

@@ -9,6 +9,7 @@ import {
   LucideSettings2,
   LucideShoppingBag,
   LucideShoppingCart,
+  LucideSparkles,
   LucideUserCog,
   LucideUsers,
   LucideWarehouse,
@@ -62,6 +63,7 @@ export const navigationGroups: NavigationGroup[] = [
   {
     label: 'Inteligencia artificial',
     items: [
+      { label: 'Informe de inventario', icon: LucideSparkles, href: '/ia/informe-inventario' },
       { label: 'Predicciones', icon: LucideBrainCircuit, href: '/ia/predicciones' },
       { label: 'Análisis de demanda', icon: LucideFileChartColumnIncreasing, href: '/ia/demanda' },
     ],
@@ -75,23 +77,3 @@ export const navigationGroups: NavigationGroup[] = [
   },
 ];
 
-export const salesData = [
-  { day: 'Lun', value: 37 },
-  { day: 'Mar', value: 55 },
-  { day: 'Mié', value: 45 },
-  { day: 'Jue', value: 73 },
-  { day: 'Vie', value: 62 },
-  { day: 'Sáb', value: 88 },
-  { day: 'Dom', value: 69 },
-  { day: 'Lun', value: 77 },
-  { day: 'Mar', value: 59 },
-  { day: 'Mié', value: 91 },
-  { day: 'Jue', value: 72 },
-  { day: 'Vie', value: 100 },
-];
-
-export const demandItems = [
-  { name: 'Café molido premium', category: 'Alimentos y bebidas', stock: '18 uds.', demand: '+32%', tone: 'rose', initials: 'CM', color: 'lavender' },
-  { name: 'Leche entera 1L', category: 'Lácteos', stock: '24 uds.', demand: '+24%', tone: 'amber', initials: 'LE', color: 'cream' },
-  { name: 'Aceite de oliva 500ml', category: 'Despensa', stock: '31 uds.', demand: '+18%', tone: 'blue', initials: 'AO', color: 'mint' },
-];
