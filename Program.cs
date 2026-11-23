@@ -1,6 +1,7 @@
 using System.Text;
 using System.Threading.RateLimiting;
 using ControlStock.Auth;
+using ControlStock.Reportes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -78,7 +79,27 @@ builder.Services.AddRateLimiter(options =>
             Window = TimeSpan.FromMinutes(1),
             QueueLimit = 0,
         }));
+
+    // Cada informe cuesta una llamada a la IA: máximo 5 por minuto y usuario.
+    options.AddPolicy("reportes", httpContext => RateLimitPartition.GetFixedWindowLimiter(
+        httpContext.User.FindFirst("sub")?.Value ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonimo",
+        _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 5,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0,
+        }));
 });
+
+// ---- Informes con IA (Replicate): token solo en backend (appsettings.Local.json / Replicate__Token) ----
+builder.Services.Configure<ReplicateOptions>(builder.Configuration.GetSection(ReplicateOptions.SectionName));
+builder.Services.AddHttpClient<ReplicateClient>(client =>
+{
+    client.BaseAddress = new Uri("https://api.replicate.com/");
+    client.Timeout = TimeSpan.FromMinutes(3); // el límite real lo impone ReplicateOptions.TimeoutSeconds
+});
+builder.Services.AddSingleton<InformeBuilder>();
+builder.Services.AddScoped<InformeIAService>();
 
 // ---- CORS: frontend Angular (ng serve) ----
 const string FrontendCors = "Frontend";
@@ -101,10 +122,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(FrontendCors);
-app.UseRateLimiter();
-
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter(); // después de autenticar: la política "reportes" usa el usuario
 
 app.MapControllers();
 

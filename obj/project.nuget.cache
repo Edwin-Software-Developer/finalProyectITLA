@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UfW2o6YkqRU=",
+  "dgSpecHash": "GlFa2jzqBI8=",
   "success": true,
-  "projectFilePath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+  "projectFilePath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\edwin.perez\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\dapper\\2.1.89\\dapper.2.1.89.nupkg.sha512",
@@ -27,6 +27,7 @@
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.16.0\\microsoft.identitymodel.tokens.8.16.0.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\edwin.perez\\.nuget\\packages\\questpdf\\2024.12.3\\questpdf.2024.12.3.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
