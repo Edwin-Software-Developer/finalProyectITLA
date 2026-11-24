@@ -10,19 +10,19 @@
 }
 
 .notice {
-  background: #e9f8ef;
-  border: 1px solid #c4ebd3;
+  background: color-mix(in srgb, #e9f8ef var(--tint), var(--surface));
+  border: 1px solid color-mix(in srgb, #c4ebd3 var(--tint), var(--surface));
   border-radius: 10px;
-  color: #1d7a45;
+  color: color-mix(in srgb, #1d7a45, white var(--lift));
   font-weight: 600;
   margin-bottom: 14px;
   padding: 11px 14px;
 }
 
 .notice-error {
-  background: #fdecec;
-  border-color: #f6cccc;
-  color: #b42318;
+  background: color-mix(in srgb, #fdecec var(--tint), var(--surface));
+  border-color: color-mix(in srgb, #f6cccc var(--tint), var(--surface));
+  color: color-mix(in srgb, #b42318, white var(--lift));
 }
 
 .products-panel {
@@ -40,7 +40,7 @@
 
 .products-search {
   align-items: center;
-  background: #f7f8fb;
+  background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: 9px;
   color: var(--muted);
@@ -61,7 +61,7 @@
 }
 
 .products-select {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 9px;
   color: var(--ink);
@@ -86,7 +86,7 @@
 }
 
 .products-error strong {
-  color: #b42318;
+  color: color-mix(in srgb, #b42318, white var(--lift));
 }
 
 .table-scroll {
@@ -133,16 +133,16 @@
 }
 
 .badge {
-  background: #e9f8ef;
+  background: color-mix(in srgb, #e9f8ef var(--tint), var(--surface));
   border-radius: 999px;
-  color: #1d7a45;
+  color: color-mix(in srgb, #1d7a45, white var(--lift));
   font-size: 11px;
   font-weight: 700;
   padding: 3px 9px;
 }
 
 .badge-off {
-  background: #f1f3f7;
+  background: var(--surface-2);
   color: var(--muted);
 }
 
@@ -156,7 +156,7 @@
 }
 
 .icon-danger:hover:not(:disabled) {
-  color: #b42318;
+  color: color-mix(in srgb, #b42318, white var(--lift));
 }
 
 .icon-button:disabled,
@@ -179,7 +179,7 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--surface);
   border-radius: 14px;
   box-shadow: 0 24px 60px rgba(17, 24, 39, 0.25);
   max-height: calc(100vh - 32px);
@@ -220,8 +220,8 @@
 
 .field input,
 .field select {
-  background: #fff;
-  border: 1px solid #dfe3ec;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, #dfe3ec var(--tint), var(--surface));
   border-radius: 9px;
   color: var(--ink);
   height: 38px;
@@ -240,16 +240,16 @@
 }
 
 .field em {
-  color: #b42318;
+  color: color-mix(in srgb, #b42318, white var(--lift));
   font-size: 11px;
   font-style: normal;
 }
 
 .form-error {
-  background: #fdecec;
-  border: 1px solid #f6cccc;
+  background: color-mix(in srgb, #fdecec var(--tint), var(--surface));
+  border: 1px solid color-mix(in srgb, #f6cccc var(--tint), var(--surface));
   border-radius: 9px;
-  color: #b42318;
+  color: color-mix(in srgb, #b42318, white var(--lift));
   margin-top: 14px;
   padding: 10px 12px;
 }
@@ -262,8 +262,8 @@
 }
 
 .ghost-button {
-  background: #fff;
-  border: 1px solid #dfe3ec;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, #dfe3ec var(--tint), var(--surface));
   border-radius: 10px;
   font-weight: 600;
   height: 38px;

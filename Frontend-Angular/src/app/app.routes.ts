@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard, guestGuard, roleGuard } from './guards/auth.guard';
 import { DashboardPage } from './pages/dashboard-page';
+import { AparienciaPage } from './pages/apariencia-page';
 import { ConfiguracionPage } from './pages/configuracion-page';
 import { ALMACENES, CLIENTES, IMPUESTOS, MONEDAS, PROVEEDORES } from './data/catalog.configs';
 import { CatalogPage } from './pages/catalog-page';
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: 'inventario/almacenes', component: CatalogPage, data: { catalog: ALMACENES } },
       { path: 'inventario/movimientos', component: MovimientosPage, canActivate: [roleGuard('Administrador', 'Operador')] },
       { path: 'inventario/reposicion', component: ReposicionPage },
+      { path: 'configuracion/apariencia', component: AparienciaPage },
       { path: 'configuracion', component: ConfiguracionPage, canActivate: [roleGuard('Administrador')] },
       { path: 'configuracion/monedas', component: CatalogPage, data: { catalog: MONEDAS }, canActivate: [roleGuard('Administrador')] },
       { path: 'configuracion/impuestos', component: CatalogPage, data: { catalog: IMPUESTOS }, canActivate: [roleGuard('Administrador')] },

@@ -45,6 +45,8 @@ export class DashboardPage implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly auth = inject(AuthService);
 
+  protected readonly canWrite = this.auth.canWrite;
+
   protected readonly firstName = computed(() => this.auth.user()?.nombre.trim().split(/\s+/)[0] ?? '');
 
   protected readonly periods = [

@@ -24,13 +24,13 @@ const ETIQUETA: Record<TipoMovimiento, string> = {
   // Misma apariencia de tabla/modal que Productos.
   styleUrl: './productos-page.css',
   styles: `
-    .tipo { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #eef2f7; color: #475569; }
-    .tipo-ENTRADA { background: #dcfce7; color: #15803d; }
-    .tipo-SALIDA { background: #fee2e2; color: #b91c1c; }
-    .tipo-AJUSTE { background: #fef3c7; color: #b45309; }
-    .tipo-TRASLADO { background: #e0f2fe; color: #0369a1; }
-    .pos { color: #15803d; font-weight: 700; }
-    .neg { color: #b91c1c; font-weight: 700; }
+    .tipo { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: color-mix(in srgb, #eef2f7 var(--tint), var(--surface)); color: color-mix(in srgb, #475569, white var(--lift)); }
+    .tipo-ENTRADA { background: color-mix(in srgb, #dcfce7 var(--tint), var(--surface)); color: color-mix(in srgb, #15803d, white var(--lift)); }
+    .tipo-SALIDA { background: color-mix(in srgb, #fee2e2 var(--tint), var(--surface)); color: color-mix(in srgb, #b91c1c, white var(--lift)); }
+    .tipo-AJUSTE { background: color-mix(in srgb, #fef3c7 var(--tint), var(--surface)); color: color-mix(in srgb, #b45309, white var(--lift)); }
+    .tipo-TRASLADO { background: color-mix(in srgb, #e0f2fe var(--tint), var(--surface)); color: color-mix(in srgb, #0369a1, white var(--lift)); }
+    .pos { color: color-mix(in srgb, #15803d, white var(--lift)); font-weight: 700; }
+    .neg { color: color-mix(in srgb, #b91c1c, white var(--lift)); font-weight: 700; }
     .hint { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 13px; }
   `,
 })

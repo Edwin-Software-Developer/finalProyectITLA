@@ -16,13 +16,13 @@ type LoadState = 'loading' | 'ready' | 'error';
   styleUrl: './productos-page.css',
   styles: `
     .estado { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-    .estado-COMPLETADA { background: #dcfce7; color: #15803d; }
-    .estado-ANULADA { background: #fee2e2; color: #b91c1c; }
+    .estado-COMPLETADA { background: color-mix(in srgb, #dcfce7 var(--tint), var(--surface)); color: color-mix(in srgb, #15803d, white var(--lift)); }
+    .estado-ANULADA { background: color-mix(in srgb, #fee2e2 var(--tint), var(--surface)); color: color-mix(in srgb, #b91c1c, white var(--lift)); }
     .modal-wide { width: min(820px, 96vw); max-height: 92vh; overflow: auto; }
     .resumen { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin-bottom: 12px; }
     .totales { text-align: right; font-weight: 700; margin-top: 8px; }
     .fila-click { cursor: pointer; }
-    .fila-click:hover { background: #f7f9fc; }
+    .fila-click:hover { background: var(--surface-2); }
     a.primary-button { text-decoration: none; }
   `,
 })

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideArrowRight, LucideBadgePercent, LucideCoins, LucideUserCog } from '@lucide/angular';
+import { LucideArrowRight, LucideBadgePercent, LucideCoins, LucidePalette, LucideUserCog } from '@lucide/angular';
 
 @Component({
   selector: 'app-configuracion-page',
-  imports: [RouterLink, LucideArrowRight, LucideBadgePercent, LucideCoins, LucideUserCog],
+  imports: [RouterLink, LucideArrowRight, LucideBadgePercent, LucideCoins, LucidePalette, LucideUserCog],
   template: `
     <div class="dashboard-content mx-auto w-full">
       <div class="page-heading">
@@ -25,6 +25,11 @@ import { LucideArrowRight, LucideBadgePercent, LucideCoins, LucideUserCog } from
           <a routerLink="/configuracion/impuestos" class="quick-link">
             <span class="quick-link-icon quick-amber"><svg lucideBadgePercent [size]="18"></svg></span>
             <span><strong>Impuestos</strong><small>ITBIS y otros porcentajes</small></span>
+            <svg lucideArrowRight [size]="16"></svg>
+          </a>
+          <a routerLink="/configuracion/apariencia" class="quick-link">
+            <span class="quick-link-icon quick-green"><svg lucidePalette [size]="18"></svg></span>
+            <span><strong>Apariencia</strong><small>Tema claro, oscuro o automático</small></span>
             <svg lucideArrowRight [size]="16"></svg>
           </a>
           <a routerLink="/usuarios" class="quick-link">

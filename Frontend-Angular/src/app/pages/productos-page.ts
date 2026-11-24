@@ -1,6 +1,7 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, HostListener, OnInit, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import {
   LucidePencil,
   LucidePlus,
@@ -41,6 +42,7 @@ export class ProductosPage implements OnInit {
   private readonly api = inject(ProductosService);
   private readonly fb = inject(FormBuilder).nonNullable;
   protected readonly auth = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly unidades = ['Unidad', 'Libra', 'Litro', 'Paquete', 'Caja', 'Kilogramo'];
 
@@ -87,6 +89,9 @@ export class ProductosPage implements OnInit {
   });
 
   ngOnInit(): void {
+    // Llegada desde la búsqueda global: /productos?q=...
+    const q = this.route.snapshot.queryParamMap.get('q');
+    if (q) this.search.set(q);
     this.load();
     this.api.categorias().subscribe({ next: (c) => this.categorias.set(c) });
     this.api.impuestos().subscribe({ next: (i) => this.impuestos.set(i) });

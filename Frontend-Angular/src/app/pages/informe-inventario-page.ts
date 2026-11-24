@@ -109,13 +109,13 @@ type Estado = 'vacio' | 'generando' | 'listo' | 'error';
     .acciones { display: flex; gap: 10px; flex-wrap: wrap; }
     .secondary-button {
       display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px;
-      border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink);
+      border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink);
       font-weight: 600; cursor: pointer;
     }
-    .secondary-button:hover:not(:disabled) { background: #f7f9fc; }
+    .secondary-button:hover:not(:disabled) { background: var(--surface-2); }
     button:disabled { opacity: 0.6; cursor: progress; }
-    .notice { margin-bottom: 14px; padding: 12px 16px; border-radius: 10px; background: #eef4ff; color: #1e3a8a; font-size: 14px; }
-    .notice-error { background: #fef2f2; color: #991b1b; }
+    .notice { margin-bottom: 14px; padding: 12px 16px; border-radius: 10px; background: color-mix(in srgb, #eef4ff var(--tint), var(--surface)); color: color-mix(in srgb, #1e3a8a, white var(--lift)); font-size: 14px; }
+    .notice-error { background: color-mix(in srgb, #fef2f2 var(--tint), var(--surface)); color: color-mix(in srgb, #991b1b, white var(--lift)); }
     .estado-vacio { padding: 40px 24px; text-align: center; color: var(--muted); }
     .informe { padding: 24px; }
     .informe h2 { margin: 0; font-size: 22px; color: var(--ink); }
@@ -125,15 +125,15 @@ type Estado = 'vacio' | 'generando' | 'listo' | 'error';
     .kpis div { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
     .kpis span { font-size: 12px; color: var(--muted); }
     .kpis strong { font-size: 20px; color: var(--ink); }
-    .kpis .rojo { color: #dc2626; }
-    .kpis .naranja { color: #d97706; }
+    .kpis .rojo { color: color-mix(in srgb, #dc2626, white var(--lift)); }
+    .kpis .naranja { color: color-mix(in srgb, #d97706, white var(--lift)); }
     .texto { line-height: 1.6; color: var(--ink); margin: 0; }
     .lista { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; line-height: 1.5; color: var(--ink); }
-    .tag { display: inline-block; margin-right: 6px; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; background: #eef2f7; color: #475569; }
-    .tag-quiebre, .tag-alta { background: #fee2e2; color: #b91c1c; }
-    .tag-sobrestock, .tag-media { background: #fef3c7; color: #b45309; }
-    .tag-rotacion { background: #e0f2fe; color: #0369a1; }
-    .tag-baja { background: #dcfce7; color: #15803d; }
+    .tag { display: inline-block; margin-right: 6px; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; background: color-mix(in srgb, #eef2f7 var(--tint), var(--surface)); color: color-mix(in srgb, #475569, white var(--lift)); }
+    .tag-quiebre, .tag-alta { background: color-mix(in srgb, #fee2e2 var(--tint), var(--surface)); color: color-mix(in srgb, #b91c1c, white var(--lift)); }
+    .tag-sobrestock, .tag-media { background: color-mix(in srgb, #fef3c7 var(--tint), var(--surface)); color: color-mix(in srgb, #b45309, white var(--lift)); }
+    .tag-rotacion { background: color-mix(in srgb, #e0f2fe var(--tint), var(--surface)); color: color-mix(in srgb, #0369a1, white var(--lift)); }
+    .tag-baja { background: color-mix(in srgb, #dcfce7 var(--tint), var(--surface)); color: color-mix(in srgb, #15803d, white var(--lift)); }
   `,
 })
 export class InformeInventarioPage {

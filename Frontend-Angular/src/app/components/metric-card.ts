@@ -17,9 +17,11 @@ import {
         <div class="metric-icon" [class]="'metric-icon-' + tone()">
           <svg [lucideIcon]="icon()" [size]="18" [strokeWidth]="2"></svg>
         </div>
-        <button [attr.aria-label]="'Más información: ' + label()" class="metric-info">
-          <svg lucideCircleHelp [size]="15"></svg>
-        </button>
+        @if (info()) {
+          <button type="button" [attr.aria-label]="'Más información: ' + label()" [attr.title]="info()" class="metric-info">
+            <svg lucideCircleHelp [size]="15"></svg>
+          </button>
+        }
       </div>
       <p class="metric-label">{{ label() }}</p>
       <div class="metric-value-row">
@@ -44,5 +46,7 @@ export class MetricCard {
   readonly change = input.required<string>();
   readonly detail = input.required<string>();
   readonly tone = input.required<'blue' | 'green' | 'orange' | 'purple'>();
+  /** Texto de ayuda (tooltip). Sin texto, no se muestra el botón de información. */
+  readonly info = input('');
   readonly trend = input<'up' | 'down'>('up');
 }
