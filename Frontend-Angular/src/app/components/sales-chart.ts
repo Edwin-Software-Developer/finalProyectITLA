@@ -25,7 +25,11 @@ function abreviar(valor: number): string {
 @Component({
   selector: 'app-sales-chart',
   imports: [DatePipe],
-  styles: [':host { display: contents; }'],
+  styles: `
+    :host { display: contents; }
+    .linea-guia { stroke: var(--line); }
+    .punto { fill: var(--surface); }
+  `,
   template: `
     <div class="chart-wrap" role="img" [attr.aria-label]="'Gráfico de ventas de los últimos ' + data().length + ' días'">
       <div class="chart-y-labels" aria-hidden="true">
@@ -52,7 +56,7 @@ function abreviar(valor: number): string {
               [attr.x2]="width"
               [attr.y1]="y"
               [attr.y2]="y"
-              stroke="#edf0f5"
+              class="linea-guia"
               [attr.stroke-dasharray]="y === 184 ? '0' : '3 5'"
             />
           }
@@ -72,7 +76,7 @@ function abreviar(valor: number): string {
                 <circle
                   [attr.cx]="p.x"
                   [attr.cy]="p.y"
-                  fill="#fff"
+                  class="punto"
                   r="4"
                   stroke="#3979f6"
                   stroke-width="2.5"

@@ -32,16 +32,16 @@ const ETIQUETA: Record<EstadoOrden, string> = {
   // Misma apariencia de tabla/modal que Productos.
   styleUrl: './productos-page.css',
   styles: `
-    .estado { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #eef2f7; color: #475569; }
-    .estado-PENDIENTE { background: #fef3c7; color: #b45309; }
-    .estado-RECIBIDA_PARCIAL { background: #e0f2fe; color: #0369a1; }
-    .estado-RECIBIDA { background: #dcfce7; color: #15803d; }
-    .estado-CANCELADA { background: #fee2e2; color: #b91c1c; }
+    .estado { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: color-mix(in srgb, #eef2f7 var(--tint), var(--surface)); color: color-mix(in srgb, #475569, white var(--lift)); }
+    .estado-PENDIENTE { background: color-mix(in srgb, #fef3c7 var(--tint), var(--surface)); color: color-mix(in srgb, #b45309, white var(--lift)); }
+    .estado-RECIBIDA_PARCIAL { background: color-mix(in srgb, #e0f2fe var(--tint), var(--surface)); color: color-mix(in srgb, #0369a1, white var(--lift)); }
+    .estado-RECIBIDA { background: color-mix(in srgb, #dcfce7 var(--tint), var(--surface)); color: color-mix(in srgb, #15803d, white var(--lift)); }
+    .estado-CANCELADA { background: color-mix(in srgb, #fee2e2 var(--tint), var(--surface)); color: color-mix(in srgb, #b91c1c, white var(--lift)); }
     .modal-wide { width: min(880px, 96vw); max-height: 92vh; overflow: auto; }
     .linea { display: grid; grid-template-columns: 3fr 1fr 1fr 1fr auto; gap: 8px; align-items: end; margin-bottom: 8px; }
     .linea .field { margin: 0; }
     .fila-click { cursor: pointer; }
-    .fila-click:hover { background: #f7f9fc; }
+    .fila-click:hover { background: var(--surface-2); }
     .totales { text-align: right; font-weight: 700; margin-top: 8px; }
     .barra { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 12px; }
     .resumen { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin-bottom: 12px; }

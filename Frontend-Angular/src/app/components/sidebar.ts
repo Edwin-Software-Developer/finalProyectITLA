@@ -2,12 +2,12 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import {
   LucideActivity,
   LucideArrowRight,
-  LucideChevronDown,
-  LucideCircleHelp,
   LucideDynamicIcon,
   LucideLogOut,
+  LucideSparkles,
   LucideX,
 } from '@lucide/angular';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { navigationGroups } from '../data/dashboard.data';
 import { AuthService } from '../services/auth.service';
 
@@ -16,11 +16,12 @@ import { AuthService } from '../services/auth.service';
   imports: [
     LucideActivity,
     LucideArrowRight,
-    LucideChevronDown,
-    LucideCircleHelp,
     LucideDynamicIcon,
     LucideLogOut,
+    LucideSparkles,
     LucideX,
+    RouterLink,
+    RouterLinkActive,
   ],
   styles: [':host { display: contents; }'],
   template: `
@@ -35,8 +36,8 @@ import { AuthService } from '../services/auth.service';
       <div class="brand">
         <div class="brand-mark"><svg lucideActivity [size]="20" [strokeWidth]="2.4"></svg></div>
         <div class="brand-copy">
-          <span class="brand-name">nexo<span>.</span></span>
-          <span class="brand-caption">GESTIÓN INTELIGENTE</span>
+          <span class="brand-name">Control<span>Stock</span></span>
+          <span class="brand-caption">GESTIÓN DE INVENTARIO</span>
         </div>
         <button aria-label="Cerrar menú" class="sidebar-close" (click)="closed.emit()">
           <svg lucideX [size]="19"></svg>
@@ -46,10 +47,9 @@ import { AuthService } from '../services/auth.service';
       <div class="workspace-switcher">
         <div class="workspace-icon">N</div>
         <div class="workspace-copy">
-          <strong>Nova Market</strong>
-          <span>Plan profesional</span>
+          <strong>ControlStock</strong>
+          <span>Inventario y ventas</span>
         </div>
-        <svg lucideChevronDown [size]="15" class="workspace-chevron"></svg>
       </div>
 
       <nav aria-label="Navegación principal" class="sidebar-nav">
@@ -57,18 +57,16 @@ import { AuthService } from '../services/auth.service';
           <div class="nav-group">
             <p class="nav-heading">{{ group.label }}</p>
             @for (item of group.items; track item.label) {
-              @let active = item.label === 'Dashboard';
               <a
                 class="nav-link"
-                [class.nav-link-active]="active"
-                [attr.aria-current]="active ? 'page' : null"
-                [href]="item.href"
+                [routerLink]="item.href"
+                routerLinkActive="nav-link-active"
+                ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closed.emit()"
               >
-                <svg [lucideIcon]="item.icon" [size]="17" [strokeWidth]="active ? 2.2 : 1.8"></svg>
+                <svg [lucideIcon]="item.icon" [size]="17" [strokeWidth]="1.8"></svg>
                 <span>{{ item.label }}</span>
-                @if (item.label === 'Predicciones') {
-                  <span class="nav-count">3</span>
-                }
               </a>
             }
           </div>
@@ -76,14 +74,14 @@ import { AuthService } from '../services/auth.service';
       </nav>
 
       <div class="sidebar-bottom">
-        <div class="help-card">
-          <div class="help-icon"><svg lucideCircleHelp [size]="17"></svg></div>
+        <a class="help-card" routerLink="/ia/informe-inventario" (click)="closed.emit()">
+          <div class="help-icon"><svg lucideSparkles [size]="17"></svg></div>
           <div>
-            <strong>¿Necesitas ayuda?</strong>
-            <p>Visita nuestro centro de ayuda</p>
+            <strong>Informe con IA</strong>
+            <p>Resumen de tu inventario</p>
           </div>
           <svg lucideArrowRight [size]="15"></svg>
-        </div>
+        </a>
         <div class="profile">
           <div class="avatar avatar-user">{{ auth.initials() }}</div>
           <div class="profile-copy">

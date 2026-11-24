@@ -1,5 +1,5 @@
 @if (auth.isAuthenticated()) {
-  <div class="app-shell" style="background: #f8fafc">
+  <div class="app-shell" style="background: var(--bg)">
     <app-sidebar [open]="menuOpen()" (closed)="menuOpen.set(false)" />
     <main class="main-area">
       <header class="topbar">
@@ -14,26 +14,10 @@
           </div>
         </div>
         <div class="topbar-actions">
-          <label class="search-box" [class.search-box-open]="searchOpen()">
-            <svg lucideSearch [size]="17"></svg>
-            <input
-              id="global-search"
-              placeholder="Buscar..."
-              type="search"
-              (focus)="searchOpen.set(true)"
-              (blur)="searchOpen.set(false)"
-            />
-            <kbd><svg lucideCommand [size]="11"></svg> K</kbd>
-          </label>
+          <app-global-search />
           <span class="topbar-divider"></span>
-          <button aria-label="Notificaciones" class="icon-button notification-button">
-            <svg lucideBell [size]="18"></svg>
-            <span class="notification-dot"></span>
-          </button>
-          <div class="topbar-user" [attr.title]="auth.user()?.nombre">
-            <div class="avatar avatar-user">{{ auth.initials() }}</div>
-            <svg lucideChevronDown [size]="14"></svg>
-          </div>
+          <app-notifications-menu />
+          <app-user-menu />
         </div>
       </header>
 

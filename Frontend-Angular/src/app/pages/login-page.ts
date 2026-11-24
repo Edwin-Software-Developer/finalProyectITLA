@@ -12,14 +12,14 @@ import { AuthService } from '../services/auth.service';
   styles: `
     :host {
       align-items: center;
-      background: #f7f8fb;
+      background: var(--surface-2);
       display: flex;
       justify-content: center;
       min-height: 100vh;
       padding: 16px;
     }
     .card {
-      background: #fff;
+      background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 16px;
       box-shadow: 0 18px 50px rgba(17, 24, 39, 0.08);
@@ -67,8 +67,8 @@ import { AuthService } from '../services/auth.service';
       font-weight: 600;
     }
     .field input {
-      background: #fff;
-      border: 1px solid #dfe3ec;
+      background: var(--surface);
+      border: 1px solid color-mix(in srgb, #dfe3ec var(--tint), var(--surface));
       border-radius: 9px;
       color: var(--ink);
       height: 40px;
@@ -83,15 +83,15 @@ import { AuthService } from '../services/auth.service';
       border-color: #e5484d;
     }
     .field em {
-      color: #b42318;
+      color: color-mix(in srgb, #b42318, white var(--lift));
       font-size: 11px;
       font-style: normal;
     }
     .error {
-      background: #fdecec;
-      border: 1px solid #f6cccc;
+      background: color-mix(in srgb, #fdecec var(--tint), var(--surface));
+      border: 1px solid color-mix(in srgb, #f6cccc var(--tint), var(--surface));
       border-radius: 9px;
-      color: #b42318;
+      color: color-mix(in srgb, #b42318, white var(--lift));
       margin-bottom: 14px;
       padding: 10px 12px;
     }

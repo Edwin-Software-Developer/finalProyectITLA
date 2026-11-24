@@ -5,10 +5,12 @@
       <h1>Hola, {{ firstName() }} <span class="greeting-wave">✦</span></h1>
       <p>Aquí tienes el resumen de lo que sucede en tu negocio hoy.</p>
     </div>
-    <button class="primary-button">
-      <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
-      Nueva venta
-    </button>
+    @if (canWrite()) {
+      <a class="primary-button" routerLink="/ventas/nueva" style="text-decoration: none">
+        <svg lucidePlus [size]="17" [strokeWidth]="2.3"></svg>
+        Nueva venta
+      </a>
+    }
   </div>
 
   <section aria-label="Resumen del negocio" class="metrics-grid grid">
@@ -16,6 +18,7 @@
       <app-metric-card
         [icon]="icons.sales"
         label="Ventas del mes"
+        info="Total vendido en el mes en curso, sin ventas anuladas. Se compara con el mismo tramo del mes anterior."
         [value]="money(v.ventasMes)"
         [change]="pct(v.ventasMes, v.ventasMesAnterior)"
         detail="vs. mismo tramo del mes anterior"
@@ -25,6 +28,7 @@
       <app-metric-card
         [icon]="icons.report"
         [label]="'Ventas · ' + periodLabel()"
+        info="Total vendido en el período elegido en el gráfico, comparado con el período anterior de igual duración."
         [value]="money(v.totalPeriodo)"
         [change]="pct(v.totalPeriodo, v.totalPeriodoAnterior)"
         [detail]="'en ' + v.transaccionesPeriodo + ' transacciones'"
@@ -38,6 +42,7 @@
     <app-metric-card
       [icon]="icons.stock"
       label="Inventario bajo"
+      info="Productos cuyo stock está por debajo del mínimo definido en sus reglas de reposición."
       [value]="alertsState() === 'ready' ? alertCount() + ' alertas' : '—'"
       [change]="alertsState() === 'ready' ? alertCount() + ' productos' : 'sin datos'"
       detail="requieren reposición"
@@ -47,6 +52,7 @@
     <app-metric-card
       [icon]="icons.ticket"
       label="Ticket promedio"
+      info="Total vendido dividido entre el número de ventas del período."
       [value]="ventas() ? money(ticketPromedio()) : '—'"
       [change]="ventas() ? ventas()!.transaccionesPeriodo + ' ventas' : 'sin datos'"
       [detail]="periodLabel().toLowerCase()"
@@ -99,28 +105,34 @@
         </div>
       </div>
       <div class="quick-links">
+        @if (canWrite()) {
         <a routerLink="/ventas/nueva" class="quick-link">
           <span class="quick-link-icon quick-blue"><svg lucideShoppingCart [size]="18"></svg></span>
           <span><strong>Registrar venta</strong><small>Inicia una nueva venta</small></span>
           <svg lucideArrowRight [size]="16"></svg>
         </a>
+        }
         <a routerLink="/productos" class="quick-link">
           <span class="quick-link-icon quick-violet"><svg lucidePackage [size]="18"></svg></span>
-          <span><strong>Agregar producto</strong><small>Actualiza tu catálogo</small></span>
+          <span><strong>{{ canWrite() ? 'Agregar producto' : 'Ver productos' }}</strong><small>{{ canWrite() ? 'Actualiza tu catálogo' : 'Consulta el catálogo' }}</small></span>
           <svg lucideArrowRight [size]="16"></svg>
         </a>
+        @if (canWrite()) {
         <a routerLink="/compras" class="quick-link">
           <span class="quick-link-icon quick-amber"><svg lucideShoppingBag [size]="18"></svg></span>
           <span><strong>Nueva compra</strong><small>Repón tu inventario</small></span>
           <svg lucideArrowRight [size]="16"></svg>
         </a>
+        }
         <a routerLink="/clientes" class="quick-link">
           <span class="quick-link-icon quick-green"><svg lucideUsers [size]="18"></svg></span>
           <span><strong>Ver clientes</strong><small>Administra tus contactos</small></span>
           <svg lucideArrowRight [size]="16"></svg>
         </a>
       </div>
-      <div class="shortcut-hint"><kbd>F2</kbd> Atajo para buscar productos en Punto de venta</div>
+      @if (canWrite()) {
+        <div class="shortcut-hint"><kbd>F2</kbd> Atajo para buscar productos en Punto de venta</div>
+      }
     </section>
   </section>
 

@@ -5,7 +5,16 @@
   <title>ControlStock | Panel de control</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Aplica el tema guardado antes de que cargue Angular, para evitar un destello en blanco. -->
+  <script>
+    (function () {
+      var modo = 'sistema';
+      try { modo = localStorage.getItem('controlstock.theme') || 'sistema'; } catch (e) {}
+      var oscuro = modo === 'oscuro' || (modo === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', oscuro ? 'dark' : 'light');
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>
