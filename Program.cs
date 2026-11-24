@@ -106,7 +106,13 @@ const string FrontendCors = "Frontend";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCors, policy => policy
-        .WithOrigins("http://localhost:4200", "http://localhost:4201")
+        .SetIsOriginAllowed(origin =>
+        {
+            if (origin is "http://localhost:4200" or "http://localhost:4201") return true;
+            if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri)) return false;
+            // Despliegues de Vercel (producción y previews con URL cambiante)
+            return uri.Scheme == Uri.UriSchemeHttps && uri.Host.EndsWith(".vercel.app", StringComparison.OrdinalIgnoreCase);
+        })
         .AllowAnyHeader()
         .AllowAnyMethod());
 });

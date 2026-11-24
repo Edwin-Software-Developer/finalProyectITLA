@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <!-- Azure solo ofrece .NET 10/11: permite ejecutar este build de net8.0 en el runtime 10 -->
+    <RollForward>Major</RollForward>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
