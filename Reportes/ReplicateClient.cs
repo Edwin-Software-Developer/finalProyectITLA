@@ -13,7 +13,7 @@ namespace ControlStock.Reportes
         public string Token { get; set; } = string.Empty;
 
         /// <summary>Modelo "propietario/nombre" de Replicate.</summary>
-        public string Model { get; set; } = "ibm-granite/granite-4.2-8b";
+        public string Model { get; set; } = "anthropic/claude-4.5-haiku";
 
         public int MaxTokens { get; set; } = 2500;
 
