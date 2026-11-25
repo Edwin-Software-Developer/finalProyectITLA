@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {}
+    "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {}
   },
   "projects": {
-    "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {
+    "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+        "projectUniqueName": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
         "projectName": "ControlStock",
-        "projectPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+        "projectPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
         "packagesPath": "C:\\Users\\edwin.perez\\.nuget\\packages\\",
-        "outputPath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
+        "outputPath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\edwin.perez\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -85,10 +85,6 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.33, 8.0.33]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
               "version": "[8.0.33, 8.0.33]"
             },
             {

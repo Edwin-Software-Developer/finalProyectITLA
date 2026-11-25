@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GlFa2jzqBI8=",
+  "dgSpecHash": "OWVllbncVdU=",
   "success": true,
-  "projectFilePath": "C:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
+  "projectFilePath": "c:\\Proyecto\\finalProyectITLA\\finalProyectITLA\\ControlStock.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\edwin.perez\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\dapper\\2.1.89\\dapper.2.1.89.nupkg.sha512",
@@ -40,8 +40,7 @@
     "C:\\Users\\edwin.perez\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.33\\microsoft.netcore.app.ref.8.0.33.nupkg.sha512",
     "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.33\\microsoft.windowsdesktop.app.ref.8.0.33.nupkg.sha512",
-    "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.33\\microsoft.aspnetcore.app.ref.8.0.33.nupkg.sha512",
-    "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.33\\microsoft.netcore.app.host.win-x64.8.0.33.nupkg.sha512"
+    "C:\\Users\\edwin.perez\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.33\\microsoft.aspnetcore.app.ref.8.0.33.nupkg.sha512"
   ],
   "logs": []
 }
